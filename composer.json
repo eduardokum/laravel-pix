@@ -1,6 +1,6 @@
 {
-    "name": "mateusjunges/laravel-pix",
-    "description": "PIX integration with Laravel",
+    "name": "jrodella/laravel-pix",
+    "description": "PIX integration with Laravel (This is a fork from: mateusjunges/laravel-pix)",
     "type": "library",
     "keywords": [
         "laravel",
