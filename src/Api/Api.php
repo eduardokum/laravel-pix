@@ -21,6 +21,7 @@ class Api implements ConsumesPixApi
     protected array $additionalOptions = [];
     protected Psp $psp;
     protected CanResolveEndpoints $endpointsResolver;
+    protected bool $bypassCertificateVerification = false;
 
     public function __construct()
     {
@@ -108,11 +109,14 @@ class Api implements ConsumesPixApi
             'Cache-Control' => 'no-cache',
         ]);
 
+        $options = [];
         if ($this->shouldVerifySslCertificate()) {
-            $client->withOptions([
-                'cert' => $this->getCertificate(),
-            ]);
+            $options['cert'] = $this->getCertificate();
         }
+        if ($this->shouldBypassCertificateVerification()){
+            $options['verify'] = false;
+        }
+        $client->withOptions($options);
 
         $client->withToken($this->oauthToken);
 
@@ -166,5 +170,17 @@ class Api implements ConsumesPixApi
     private function shouldVerifySslCertificate(): bool
     {
         return PixServiceProvider::$verifySslCertificate;
+    }
+
+    private function shouldBypassCertificateVerification(): bool
+    {
+        return $this->bypassCertificateVerification;
+    }
+
+    public function bypassCertificateVerification()
+    {
+        $this->bypassCertificateVerification = true;
+
+        return $this;
     }
 }
