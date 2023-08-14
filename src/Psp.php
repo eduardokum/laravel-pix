@@ -84,6 +84,11 @@ class Psp
         return app($this->getPspConfig($this->getCurrentPsp())['resolve_endpoints_using']);
     }
 
+    public function getBankingEndpointsResolver(): CanResolveEndpoints
+    {
+        return app($this->getPspConfig($this->getCurrentPsp())['resolve_banking_endpoints_using']);
+    }
+
     private function getPspConfig(string $psp)
     {
         throw_if(!$this->validatePsp($this->getCurrentPsp()), InvalidPspException::pspNotFound($this->getCurrentPsp()));

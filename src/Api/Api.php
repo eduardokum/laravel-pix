@@ -162,6 +162,11 @@ class Api implements ConsumesPixApi
         return $this->getPsp()->getEndpointsResolver()->getEndpoint($endpoint);
     }
 
+    protected function resolveBankingEndpoint(string $endpoint): string
+    {
+        return $this->getPsp()->getBankingEndpointsResolver()->getEndpoint($endpoint);
+    }
+
     protected function getEndpoint(string $endpoint): string
     {
         return $endpoint.'?'.http_build_query($this->additionalParams);

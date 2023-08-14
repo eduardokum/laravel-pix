@@ -4,6 +4,7 @@ namespace Junges\Pix\Tests;
 
 use Junges\Pix\Providers\PixServiceProvider;
 use Junges\Pix\Support\Endpoints;
+use Junges\Pix\Support\BankingEndpoints;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -38,8 +39,10 @@ class TestCase extends Orchestra
         $app['config']->set('laravel-pix.psp.default.oauth_token_url', 'https://pix.example.com/oauth/token');
         $app['config']->set('laravel-pix.psp.default.authentication_class', \Junges\Pix\Api\Contracts\AuthenticatesPSPs::class);
         $app['config']->set('laravel-pix.psp.default.resolve_endpoints_using', Endpoints::class);
+        $app['config']->set('laravel-pix.psp.default.resolve_banking_endpoints_using', BankingEndpoints::class);
         $app['config']->set('laravel-pix.psp.dummy-psp.base_url', 'https://pix.dummy-psp.com/v2');
         $app['config']->set('laravel-pix.psp.dummy-psp.oauth_token_url', 'https://pix.dummy-psp.com/oauth/token');
         $app['config']->set('laravel-pix.psp.dummy-psp.resolve_endpoints_using', EndpointsResolver::class);
+        $app['config']->set('laravel-pix.psp.dummy-psp.resolve_banking_endpoints_using', BankingEndpointsResolver::class);
     }
 }
