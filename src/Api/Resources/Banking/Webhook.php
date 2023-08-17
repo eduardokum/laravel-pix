@@ -2,17 +2,18 @@
 
 namespace Junges\Pix\Api\Resources\Banking;
 
+use RuntimeException;
+use Junges\Pix\Api\BankingApi;
+use Junges\Pix\Support\Endpoints;
 use Illuminate\Http\Client\Response;
-use Junges\Pix\Api\Api;
+use Junges\Pix\Support\BankingEndpoints;
 use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Api\Contracts\ConsumesWebhookEndpoints;
 use Junges\Pix\Api\Contracts\FilterApiRequests;
 use Junges\Pix\Events\Webhooks\WebhookCreatedEvent;
 use Junges\Pix\Events\Webhooks\WebhookDeletedEvent;
-use Junges\Pix\Support\Endpoints;
-use RuntimeException;
+use Junges\Pix\Api\Contracts\ConsumesWebhookEndpoints;
 
-class Webhook extends Api implements ConsumesWebhookEndpoints
+class Webhook extends BankingApi
 {
     public function createTransferWebhook(string $callbackUrl): Response
     {

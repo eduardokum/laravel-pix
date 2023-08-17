@@ -2,7 +2,7 @@
 
 namespace Junges\Pix;
 
-use Junges\Pix\Api\Api;
+use Junges\Pix\Api\BankingApi;
 use Junges\Pix\Api\Resources\Banking\Pix;
 use Junges\Pix\Api\Resources\Banking\Balance;
 use Junges\Pix\Api\Resources\Banking\Webhook;
@@ -14,9 +14,9 @@ class Banking
      *
      * @return Api
      */
-    public static function api(): Api
+    public static function api(): BankingApi
     {
-        return new Api();
+        return new BankingApi();
     }
 
     /**

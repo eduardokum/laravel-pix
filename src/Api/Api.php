@@ -101,13 +101,13 @@ class Api implements ConsumesPixApi
         return $this->psp;
     }
 
-    protected function request(): PendingRequest
+    protected function request(array $extraHeaders = []): PendingRequest
     {
-        $client = Http::withHeaders([
+        $client = Http::withHeaders(array_merge([
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
             'Cache-Control' => 'no-cache',
-        ]);
+        ], $extraHeaders));
 
         $options = [];
         if ($this->shouldVerifySslCertificate()) {
