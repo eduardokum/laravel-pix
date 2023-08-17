@@ -101,13 +101,13 @@ class Api implements ConsumesPixApi
         return $this->psp;
     }
 
-    protected function request(): PendingRequest
+    protected function request(array $extraHeaders = []): PendingRequest
     {
-        $client = Http::withHeaders([
+        $client = Http::withHeaders(array_merge([
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
             'Cache-Control' => 'no-cache',
-        ]);
+        ], $extraHeaders));
 
         $options = [];
         if ($this->shouldVerifySslCertificate()) {
@@ -160,6 +160,11 @@ class Api implements ConsumesPixApi
     protected function resolveEndpoint(string $endpoint): string
     {
         return $this->getPsp()->getEndpointsResolver()->getEndpoint($endpoint);
+    }
+
+    protected function resolveBankingEndpoint(string $endpoint): string
+    {
+        return $this->getPsp()->getBankingEndpointsResolver()->getEndpoint($endpoint);
     }
 
     protected function getEndpoint(string $endpoint): string

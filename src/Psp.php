@@ -49,6 +49,11 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['oauth_token_url'] ?? '';
     }
 
+    public function getBankingOauthTokenUrl(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_oauth_token_url'] ?? '';
+    }
+
     public function getPspSSLCertificate(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['ssl_certificate'] ?? '';
@@ -69,6 +74,21 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['client_secret'] ?? '';
     }
 
+    public function getPspBankingBaseUrl(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_base_url'] ?? '';
+    }
+
+    public function getPspBankingClientId(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_client_id'] ?? '';
+    }
+
+    public function getPspBankingClientSecret(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_client_secret'] ?? '';
+    }
+
     public function getPspOauthBearerToken(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['oauth_bearer_token'] ?? '';
@@ -79,9 +99,19 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['authentication_class'] ?? '';
     }
 
+    public function getBankingAuthenticationClass(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_authentication_class'] ?? '';
+    }
+
     public function getEndpointsResolver(): CanResolveEndpoints
     {
         return app($this->getPspConfig($this->getCurrentPsp())['resolve_endpoints_using']);
+    }
+
+    public function getBankingEndpointsResolver(): CanResolveEndpoints
+    {
+        return app($this->getPspConfig($this->getCurrentPsp())['resolve_banking_endpoints_using']);
     }
 
     private function getPspConfig(string $psp)
