@@ -36,13 +36,6 @@ class BankingAuth implements AuthenticatesBankingPSPs
             'auth' => [$this->clientId, $this->clientSecret],
         ]);
 
-        if ($this->shouldVerifySslCertificate()) {
-            $client->withOptions([
-                'verify' => $this->certificate,
-                'cert'   => $this->getCertificate(),
-            ]);
-        }
-
         return $client->post($this->getBankingOauthEndpoint(), [
             'clientId'     => $this->clientId,
             'clientSecret' => $this->clientSecret,
