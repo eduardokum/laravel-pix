@@ -40,6 +40,7 @@ return [
             'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
             'banking_base_url'                => env('LARAVEL_PIX_BANKING_PSP_BASE_URL'),
             'banking_oauth_token_url'         => env('LARAVEL_PIX_BANKING_PSP_OAUTH_URL', false),
+            'banking_ssl_certificate'         => env('LARAVEL_PIX_BANKING_PSP_SSL_CERTIFICATE'),
             'banking_client_secret'           => env('LARAVEL_PIX_BANKING_PSP_CLIENT_SECRET'),
             'banking_client_id'               => env('LARAVEL_PIX_BANKING_PSP_CLIENT_ID'),
             'authentication_class'            => \Junges\Pix\Api\Contracts\AuthenticatesPSPs::class,

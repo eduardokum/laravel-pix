@@ -17,7 +17,7 @@ class BankingApi extends Api implements ConsumesPixApi
         $this->psp = new Psp();
 
         $this->oauthToken($this->psp->getPspOauthBearerToken())
-            ->certificate($this->psp->getPspSSLCertificate())
+            ->certificate($this->psp->getBankingPspSSLCertificate())
             ->baseUrl($this->psp->getPspBankingBaseUrl())
             ->clientId($this->psp->getPspBankingClientId())
             ->clientSecret($this->psp->getPspBankingClientSecret());
@@ -28,7 +28,7 @@ class BankingApi extends Api implements ConsumesPixApi
         $this->psp->currentPsp($psp);
 
         $this->oauthToken($this->psp->getPspOauthBearerToken())
-            ->certificate($this->psp->getPspSSLCertificate())
+            ->certificate($this->psp->getBankingPspSSLCertificate())
             ->baseUrl($this->psp->getPspBankingBaseUrl())
             ->clientId($this->psp->getPspBankingClientId())
             ->clientSecret($this->psp->getPspBankingClientSecret());

@@ -59,6 +59,11 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['ssl_certificate'] ?? '';
     }
 
+    public function getBankingPspSSLCertificate(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['banking_ssl_certificate'] ?? '';
+    }
+
     public function getPspBaseUrl(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['base_url'] ?? '';
