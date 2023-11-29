@@ -188,4 +188,14 @@ class Api implements ConsumesPixApi
 
         return $this;
     }
+
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
 }
