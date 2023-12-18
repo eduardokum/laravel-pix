@@ -93,7 +93,8 @@ class Api implements ConsumesPixApi
             ->certificate($this->psp->getPspSSLCertificate())
             ->baseUrl($this->psp->getPspBaseUrl())
             ->clientId($this->psp->getPspClientId())
-            ->clientSecret($this->psp->getPspClientSecret());
+            ->clientSecret($this->psp->getPspClientSecret())
+            ->pixKey($this->psp->getPspPixKey());
 
         return $this;
     }
