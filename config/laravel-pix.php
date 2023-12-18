@@ -38,6 +38,7 @@ return [
             'ssl_certificate'                 => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
             'client_secret'                   => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
             'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
+            'pix_key'                         => env('LARAVEL_PIX_PSP_PIX_KEY'),
             'banking_base_url'                => env('LARAVEL_PIX_BANKING_PSP_BASE_URL'),
             'banking_oauth_token_url'         => env('LARAVEL_PIX_BANKING_PSP_OAUTH_URL', false),
             'banking_ssl_certificate'         => env('LARAVEL_PIX_BANKING_PSP_SSL_CERTIFICATE'),

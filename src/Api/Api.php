@@ -17,6 +17,7 @@ class Api implements ConsumesPixApi
     protected string $certificate;
     protected ?string $certificatePassword = null;
     protected ?string $oauthToken;
+    protected ?string $pixKey;
     protected array $additionalParams = [];
     protected array $additionalOptions = [];
     protected Psp $psp;
@@ -31,7 +32,8 @@ class Api implements ConsumesPixApi
             ->certificate($this->psp->getPspSSLCertificate())
             ->baseUrl($this->psp->getPspBaseUrl())
             ->clientId($this->psp->getPspClientId())
-            ->clientSecret($this->psp->getPspClientSecret());
+            ->clientSecret($this->psp->getPspClientSecret())
+            ->pixKey($this->psp->getPspPixKey());
     }
 
     public function baseUrl(string $baseUrl): Api
@@ -72,6 +74,13 @@ class Api implements ConsumesPixApi
     public function oauthToken(?string $oauthToken): Api
     {
         $this->oauthToken = $oauthToken;
+
+        return $this;
+    }
+
+    public function pixKey(string $pixKey): Api
+    {
+        $this->pixKey = $pixKey;
 
         return $this;
     }
@@ -197,5 +206,10 @@ class Api implements ConsumesPixApi
     public function getClientId(): string
     {
         return $this->clientId;
+    }
+
+    public function getPixKey(): string
+    {
+        return $this->pixKey;
     }
 }

@@ -79,6 +79,11 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['client_secret'] ?? '';
     }
 
+    public function getPspPixKey(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['pix_key'] ?? '';
+    }
+
     public function getPspBankingBaseUrl(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['banking_base_url'] ?? '';
