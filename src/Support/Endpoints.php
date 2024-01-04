@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Support;
+namespace Eduardokum\LaravelPix\Support;
 
 use InvalidArgumentException;
-use Junges\Pix\Contracts\CanResolveEndpoints;
+use Eduardokum\LaravelPix\Contracts\CanResolveEndpoints;
 
 class Endpoints implements CanResolveEndpoints
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Events\Webhooks;
+namespace Eduardokum\LaravelPix\Events\Webhooks;
 
 class WebhookCreatedEvent
 {

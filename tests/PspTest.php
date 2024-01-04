@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix\Tests;
+namespace Eduardokum\LaravelPix\Tests;
 
-use Junges\Pix\Exceptions\Psp\InvalidPspException;
-use Junges\Pix\LaravelPix;
-use Junges\Pix\Psp;
+use Eduardokum\LaravelPix\Exceptions\Psp\InvalidPspException;
+use Eduardokum\LaravelPix\LaravelPix;
+use Eduardokum\LaravelPix\Psp;
 
 class PspTest extends TestCase
 {

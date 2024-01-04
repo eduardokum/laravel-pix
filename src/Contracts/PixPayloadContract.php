@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Contracts;
+namespace Eduardokum\LaravelPix\Contracts;
 
 interface PixPayloadContract
 {

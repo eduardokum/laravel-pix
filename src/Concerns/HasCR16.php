@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Concerns;
+namespace Eduardokum\LaravelPix\Concerns;
 
 use Illuminate\Support\Str;
-use Junges\Pix\Pix;
+use Eduardokum\LaravelPix\Pix;
 
 trait HasCR16
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Api\Filters;
+namespace Eduardokum\LaravelPix\Api\Filters;
 
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
 
 class CobvFilters implements ApplyApiFilters
 {

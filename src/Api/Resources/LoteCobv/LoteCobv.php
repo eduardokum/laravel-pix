@@ -1,14 +1,14 @@
 <?php
 
-namespace Junges\Pix\Api\Resources\LoteCobv;
+namespace Eduardokum\LaravelPix\Api\Resources\LoteCobv;
 
 use Illuminate\Http\Client\Response;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Api\Contracts\ConsumesLoteCobvEndpoints;
-use Junges\Pix\Api\Contracts\FilterApiRequests;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Support\Endpoints;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesLoteCobvEndpoints;
+use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use RuntimeException;
 
 class LoteCobv extends Api implements ConsumesLoteCobvEndpoints, FilterApiRequests

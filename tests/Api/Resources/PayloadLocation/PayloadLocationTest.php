@@ -1,15 +1,15 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Resources\PayloadLocation;
+namespace Eduardokum\LaravelPix\Tests\Api\Resources\PayloadLocation;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\PayloadLocationFilters;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Pix;
-use Junges\Pix\Psp;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\PayloadLocationFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Psp;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class PayloadLocationTest extends TestCase
 {

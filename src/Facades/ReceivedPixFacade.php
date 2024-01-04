@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Facades;
+namespace Eduardokum\LaravelPix\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Junges\Pix\Api\Features\ReceivedPix\ReceivedPix;
+use Eduardokum\LaravelPix\Api\Features\ReceivedPix\ReceivedPix;
 
 /**
  * Class ApiConsumes.

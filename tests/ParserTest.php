@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix\Tests;
+namespace Eduardokum\LaravelPix\Tests;
 
-use Junges\Pix\Exceptions\ParserException;
-use Junges\Pix\Parser;
-use Junges\Pix\Pix;
+use Eduardokum\LaravelPix\Exceptions\ParserException;
+use Eduardokum\LaravelPix\Parser;
+use Eduardokum\LaravelPix\Pix;
 
 class ParserTest extends TestCase
 {

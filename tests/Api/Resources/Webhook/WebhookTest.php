@@ -1,17 +1,17 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Resources\Webhook;
+namespace Eduardokum\LaravelPix\Tests\Api\Resources\Webhook;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\WebhookFilters;
-use Junges\Pix\Events\Webhooks\WebhookCreatedEvent;
-use Junges\Pix\Events\Webhooks\WebhookDeletedEvent;
-use Junges\Pix\Pix;
-use Junges\Pix\Psp;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\WebhookFilters;
+use Eduardokum\LaravelPix\Events\Webhooks\WebhookCreatedEvent;
+use Eduardokum\LaravelPix\Events\Webhooks\WebhookDeletedEvent;
+use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Psp;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class WebhookTest extends TestCase
 {

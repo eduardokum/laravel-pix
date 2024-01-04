@@ -1,20 +1,21 @@
 <?php
 
-namespace Junges\Pix\Api;
+namespace Eduardokum\LaravelPix\Api;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
-use Junges\Pix\Api\Contracts\ConsumesPixApi;
-use Junges\Pix\Contracts\CanResolveEndpoints;
-use Junges\Pix\Providers\PixServiceProvider;
-use Junges\Pix\Psp;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesPixApi;
+use Eduardokum\LaravelPix\Contracts\CanResolveEndpoints;
+use Eduardokum\LaravelPix\Providers\PixServiceProvider;
+use Eduardokum\LaravelPix\Psp;
 
 class Api implements ConsumesPixApi
 {
     protected string $baseUrl;
     protected string $clientId;
     protected string $clientSecret;
-    protected string $certificate;
+    protected ?string $certificate = null;
+    protected ?string $certificateKey = null;
     protected ?string $certificatePassword = null;
     protected ?string $oauthToken;
     protected ?string $pixKey;
@@ -30,6 +31,8 @@ class Api implements ConsumesPixApi
 
         $this->oauthToken($this->psp->getPspOauthBearerToken())
             ->certificate($this->psp->getPspSSLCertificate())
+            ->certificate($this->psp->getPspSSLCertificateKey())
+            ->certificate($this->psp->getPspSSLCertificatePassword())
             ->baseUrl($this->psp->getPspBaseUrl())
             ->clientId($this->psp->getPspClientId())
             ->clientSecret($this->psp->getPspClientSecret())
@@ -64,6 +67,13 @@ class Api implements ConsumesPixApi
         return $this;
     }
 
+    public function certificateKey(string $certificateKey): Api
+    {
+        $this->certificateKey = $certificateKey;
+
+        return $this;
+    }
+
     public function certificatePassword(string $certificatePassword): Api
     {
         $this->certificatePassword = $certificatePassword;
@@ -85,12 +95,30 @@ class Api implements ConsumesPixApi
         return $this;
     }
 
+    public function usingOnTheFlyPsp(array $pspConfigs): Api
+    {
+        $this->psp->onTheFlyPsp($pspConfigs);
+
+        $this->oauthToken($this->psp->getPspOauthBearerToken())
+            ->certificate($this->psp->getPspSSLCertificate())
+            ->certificateKey($this->psp->getPspSSLCertificateKey())
+            ->certificatePassword($this->psp->getPspSSLCertificatePassword())
+            ->baseUrl($this->psp->getPspBaseUrl())
+            ->clientId($this->psp->getPspClientId())
+            ->clientSecret($this->psp->getPspClientSecret())
+            ->pixKey($this->psp->getPspPixKey());
+
+        return $this;
+    }
+
     public function usingPsp(string $psp): Api
     {
         $this->psp->currentPsp($psp);
 
         $this->oauthToken($this->psp->getPspOauthBearerToken())
             ->certificate($this->psp->getPspSSLCertificate())
+            ->certificateKey($this->psp->getPspSSLCertificateKey())
+            ->certificatePassword($this->psp->getPspSSLCertificatePassword())
             ->baseUrl($this->psp->getPspBaseUrl())
             ->clientId($this->psp->getPspClientId())
             ->clientSecret($this->psp->getPspClientSecret())
@@ -122,11 +150,12 @@ class Api implements ConsumesPixApi
         $options = [];
         if ($this->shouldVerifySslCertificate()) {
             $options['cert'] = $this->getCertificate();
+            $options['ssl_key'] = $this->certificateKey;
         }
         if ($this->shouldBypassCertificateVerification()){
             $options['verify'] = false;
         }
-        $client->withOptions($options);
+        $client->withOptions(array_filter($options));
 
         $client->withToken($this->oauthToken);
 
@@ -148,6 +177,7 @@ class Api implements ConsumesPixApi
             'clientId'                => $this->clientId,
             'clientSecret'            => $this->clientSecret,
             'certificate'             => $this->certificate,
+            'certificateKey'          => $this->certificateKey,
             'certificatePassword'     => $this->certificatePassword,
             'currentPspOauthEndpoint' => $this->psp->getOauthTokenUrl(),
         ])->getToken();
@@ -170,11 +200,6 @@ class Api implements ConsumesPixApi
     protected function resolveEndpoint(string $endpoint): string
     {
         return $this->getPsp()->getEndpointsResolver()->getEndpoint($endpoint);
-    }
-
-    protected function resolveBankingEndpoint(string $endpoint): string
-    {
-        return $this->getPsp()->getBankingEndpointsResolver()->getEndpoint($endpoint);
     }
 
     protected function getEndpoint(string $endpoint): string

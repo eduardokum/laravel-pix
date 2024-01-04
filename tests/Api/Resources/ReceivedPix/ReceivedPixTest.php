@@ -1,17 +1,17 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Resources\ReceivedPix;
+namespace Eduardokum\LaravelPix\Tests\Api\Resources\ReceivedPix;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\ReceivedPixFilters;
-use Junges\Pix\Events\ReceivedPix\RefundRequestedEvent;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Pix;
-use Junges\Pix\Psp;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\ReceivedPixFilters;
+use Eduardokum\LaravelPix\Events\ReceivedPix\RefundRequestedEvent;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Psp;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class ReceivedPixTest extends TestCase
 {

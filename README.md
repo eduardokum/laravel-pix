@@ -2,47 +2,44 @@
 
 # Uma solução simples para integrar a sua aplicação Laravel com a API PIX do Banco Central do Brasil
 
-[![Continuous Integration](https://github.com/mateusjunges/laravel-pix/actions/workflows/run-tests.yml/badge.svg?branch=master)](https://github.com/mateusjunges/laravel-pix/actions/workflows/run-tests.yml)
-[![StyleCI](https://styleci.io/repos/364809206/shield?style=flat)](https://styleci.io/repos/364809206)
-
 - [Instalação](#instalao)
-  - [Publicando os assets](#publicando-os-assets)
-  - [Publicando o arquivo de configuração](#publicando-o-arquivo-de-configurao)
+    - [Publicando os assets](#publicando-os-assets)
+    - [Publicando o arquivo de configuração](#publicando-o-arquivo-de-configurao)
 - [Endpoints](#endpoints)
 - [Configurações iniciais](#configuraes-iniciais)
-  - [Obtendo o token de acesso](#obtendo-o-token-de-acesso)
-  - [Configurando PSPs](#configurando-psps)
+    - [Obtendo o token de acesso](#obtendo-o-token-de-acesso)
+    - [Configurando PSPs](#configurando-psps)
 - [Cob](#cob)
-  - [Criando uma cobrança imediata](#criando-um-cob)
-  - [Revisando uma cobrança imediata](#revisar-uma-cobrana-imediata)
-  - [Consultando uma cobrança imediata](#consultando-uma-cobrana-imediata)
-  - [Criar cobranças imediatas sem `transactionId`](#criando-cobranas-imediatas-sem-transactionid)
-  - [Consultando lista de cobranças imediatas](#consultando-lista-de-cobranas-imediatas)
+    - [Criando uma cobrança imediata](#criando-um-cob)
+    - [Revisando uma cobrança imediata](#revisar-uma-cobrana-imediata)
+    - [Consultando uma cobrança imediata](#consultando-uma-cobrana-imediata)
+    - [Criar cobranças imediatas sem `transactionId`](#criando-cobranas-imediatas-sem-transactionid)
+    - [Consultando lista de cobranças imediatas](#consultando-lista-de-cobranas-imediatas)
 - [CobV](#cobv)
-  - [Criando uma cobrança com vencimento](#criando-cobranas-com-vencimento)
-  - [Revisando cobranças com vencimento](#revisando-cobranas-com-vencimento)
-  - [Consultando uma cobrança com vencimento](#consultar-uma-cobrana-com-vencimento)
-  - [Consultar lista de cobranças com vencimento](#consultar-lista-de-cobranas-com-vencimento)
+    - [Criando uma cobrança com vencimento](#criando-cobranas-com-vencimento)
+    - [Revisando cobranças com vencimento](#revisando-cobranas-com-vencimento)
+    - [Consultando uma cobrança com vencimento](#consultar-uma-cobrana-com-vencimento)
+    - [Consultar lista de cobranças com vencimento](#consultar-lista-de-cobranas-com-vencimento)
 - [LoteCobV](#lotecobv)
-  - [Criando cobranças com vencimento em lote](#criando-cobrana-com-vencimento-em-lote)
-  - [Revisando lotes de cobranças com vencimento](#revisar-lotes-de-cobranas-com-vencimento)
-  - [Consultar lote de cobrança com vecimento](#consultar-um-lote-de-cobranas-com-vencimento)
-  - [Consultar lista de lotes de cobrança com vencimento](#consultar-lista-de-cobranas-com-vencimento-em-lote)
+    - [Criando cobranças com vencimento em lote](#criando-cobrana-com-vencimento-em-lote)
+    - [Revisando lotes de cobranças com vencimento](#revisar-lotes-de-cobranas-com-vencimento)
+    - [Consultar lote de cobrança com vecimento](#consultar-um-lote-de-cobranas-com-vencimento)
+    - [Consultar lista de lotes de cobrança com vencimento](#consultar-lista-de-cobranas-com-vencimento-em-lote)
 - [Payload Location](#payload-location)
-  - [Criar location do payload](#criar-location-do-payload)
-  - [Consultar locations cadastradas](#consultar-locations-cadastradas)
-  - [Recuperar location do payload](#recuperar-location-do-payload)
-  - [Desvincular uma cobrança de um location](#desvincular-uma-cobrana-de-uma-location)
+    - [Criar location do payload](#criar-location-do-payload)
+    - [Consultar locations cadastradas](#consultar-locations-cadastradas)
+    - [Recuperar location do payload](#recuperar-location-do-payload)
+    - [Desvincular uma cobrança de um location](#desvincular-uma-cobrana-de-uma-location)
 - [Pix recebidos](#pix-recebidos)
-  - [Consultar um pix recebido](#consultar-pix)
-  - [Consultar lista de pix recebidos](#consultar-pix-recebidos)
-  - [Solicitar devolução de um pix](#solicitar-devoluo)
-  - [Consultar uma devolução de pix](#consultar-devoluo)
+    - [Consultar um pix recebido](#consultar-pix)
+    - [Consultar lista de pix recebidos](#consultar-pix-recebidos)
+    - [Solicitar devolução de um pix](#solicitar-devoluo)
+    - [Consultar uma devolução de pix](#consultar-devoluo)
 - [Webhooks](#webhooks)
-  - [Configurar o webhook pix](#configurar-o-webhook-pix)
-  - [Exibir informações sobre o webhook pix](#exibir-informaes-sobre-o-webhook-pix)
-  - [Cancelar o webhook pix](#cancelar-o-webhook-pix)
-  - [Consutlar webhooks cadastrados](#consultar-webhooks-cadastrados)
+    - [Configurar o webhook pix](#configurar-o-webhook-pix)
+    - [Exibir informações sobre o webhook pix](#exibir-informaes-sobre-o-webhook-pix)
+    - [Cancelar o webhook pix](#cancelar-o-webhook-pix)
+    - [Consutlar webhooks cadastrados](#consultar-webhooks-cadastrados)
 - [Configurando endpoints](#configurando-endpoints)
 
 
@@ -108,13 +105,15 @@ return [
      */
     'psp' => [
         'default' => [
-            'base_url'             => env('LARAVEL_PIX_PSP_BASE_URL'),
-            'oauth_token_url'      => env('LARAVEL_PIX_PSP_OAUTH_URL', false),
-            'oauth_bearer_token'   => env('LARAVEL_PIX_OAUTH2_BEARER_TOKEN'),
-            'ssl_certificate'      => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
-            'client_secret'        => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
-            'client_id'            => env('LARAVEL_PIX_PSP_CLIENT_ID'),
-            'authentication_class' => \Junges\Pix\Api\Contracts\AuthenticatesPSPs::class
+            'base_url'                        => env('LARAVEL_PIX_PSP_BASE_URL'),
+            'oauth_token_url'                 => env('LARAVEL_PIX_PSP_OAUTH_URL', false),
+            'oauth_bearer_token'              => env('LARAVEL_PIX_OAUTH2_BEARER_TOKEN'),
+            'ssl_certificate'                 => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
+            'client_secret'                   => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
+            'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
+            'pix_key'                         => env('LARAVEL_PIX_PSP_PIX_KEY'),
+            'authentication_class'            => \Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs::class,
+            'resolve_endpoints_using'         => \Eduardokum\LaravelPix\Support\Endpoints::class,
         ]
     ],
 ];
@@ -182,7 +181,7 @@ LARAVEL_PIX_PSP_BASE_URL="url da api pix"
 ```
 
 Agora, todas as chamadas a API Pix utilizarão estas credencias, e você não precisa informar manualmente para cada requisição.
-Entretando, se por algum motivo você desejar alterar estas credenciais em tempo de execução, 
+Entretando, se por algum motivo você desejar alterar estas credenciais em tempo de execução,
 é possível através dos métodos `->clientId()` e `->clientSecret()`, disponibilizados em todos os endpoints neste pacote. Um exemplo é mostrado abaixo:
 
 ```php
@@ -203,7 +202,7 @@ use Junges\Pix\Pix;
 $token = Pix::api()->getOauth2Token()->json();
 ```
 Alguns PSPs requerem a verificação de um certificado disponibilizado no momento da criação de sua aplicação. Este certificado pode ser informado
-no `.env`, ou informado na requisição através do método `certificate()`, e será carregado automaticamente na api. 
+no `.env`, ou informado na requisição através do método `certificate()`, e será carregado automaticamente na api.
 
 ```php
 use Junges\Pix\Pix;
@@ -212,9 +211,9 @@ use Junges\Pix\Pix;
 $token = Pix::api()->certificate('path/to/certificate')->getOauth2Token()->json();
 ```
 
-Caso os endpoints do PSP utilizado necessitem da verificação deste certificado, você precisa informar 
+Caso os endpoints do PSP utilizado necessitem da verificação deste certificado, você precisa informar
 este pacote para fazer esta verificação. Isto pode ser feito através do `AppServiceProvider` da sua aplicação, bastando adicionar esta linha ao método
-`register`: 
+`register`:
 
 ```php
 use Junges\Pix\LaravelPix;
@@ -226,7 +225,7 @@ public function register()
 ```
 Agora, todas as chamadas aos endpoints da API Pix farão a verificação com o certificado informado.
 
-Caso a classe de autenticação disponibilizada por este pacote não funcione para obter o access token no seu PSP, 
+Caso a classe de autenticação disponibilizada por este pacote não funcione para obter o access token no seu PSP,
 você pode criar sua própria implementação, bastando criar uma classe e extender a class `Junges\Pix\Api\Auth`:
 
 ```php
@@ -266,8 +265,8 @@ conteúdo retornado pelo método `getToken` desta classe.
 > É possível configurar uma classe de autenticação para cada PSP.
 
 ## Configurando PSPs
-Se você possui integrações com mais de um psp, você pode configurar os parâmetros individuais para cara um no arquivo de configurações deste pacote, 
-em `config/laravel-pix.php`. 
+Se você possui integrações com mais de um psp, você pode configurar os parâmetros individuais para cara um no arquivo de configurações deste pacote,
+em `config/laravel-pix.php`.
 
 O PSP default utilizado pelo pacote está definido na key `default`, do array de PSPs. Você pode alterar o PSP padrão através do método `useAsDefaultPsp()`,
 no seu service provider:
@@ -292,7 +291,7 @@ Para alterar o PSP em tempo de execução, você deve utilizar o método `usingP
 # Cob
 O Cob reúne os endpoints relacionados a criação de cobranças instantâneas.
 
-> Consulte a documentação oficial do banco central para informações sobre o request a ser enviado para cada endpoint, 
+> Consulte a documentação oficial do banco central para informações sobre o request a ser enviado para cada endpoint,
 > disponível [neste link](https://bacen.github.io/pix-api/index.html#/Cob/).
 
 Para utilizar os endpoints do `cob`, utilize o método `cob()`, da class `Junges\Pix\Pix`:
@@ -310,7 +309,7 @@ $cob = Pix::cob()->create('transactionId', $request)->json();
 ```
 
 ## Revisar uma cobrança imediata
-Para revisar uma cobrança imediata, deve ser utilizado o método `updateByTransactionId()`, informando o id da transação a ser atualizada e 
+Para revisar uma cobrança imediata, deve ser utilizado o método `updateByTransactionId()`, informando o id da transação a ser atualizada e
 os dados para atualização.
 
 ```php
@@ -320,7 +319,7 @@ $updateCob = Pix::cob()->updateByTransactionId('transactionId', $dataToUpdate)->
 ```
 
 ## Consultando uma cobrança imediata
-Para consultar uma cobrança através de um determinado id de transação, você deve utilizar o método `getByTransactionId`, informando o id 
+Para consultar uma cobrança através de um determinado id de transação, você deve utilizar o método `getByTransactionId`, informando o id
 da transação como parâmetro:
 
 ```php
@@ -339,7 +338,7 @@ $cob = Pix::cob()->createWithoutTransactionId($request);
 ```
 
 ## Consultando lista de cobranças imediatas
-Para consultar a lista de cobranças imediatas com parâmetros como inicio, fim, status e outros, utilize o método `all()`, 
+Para consultar a lista de cobranças imediatas com parâmetros como inicio, fim, status e outros, utilize o método `all()`,
 passando os filtros necessários. Os filtros `inicio` e `fim` são obrigatórios para toda requisição neste endpoint. Este pacote
 disponibiliza uma api para aplicação de filtros na requisição, bastando instanciar uma nova classe para os filtros desejados e aplicá-los
 a requisição com o método `withFilters()`:
@@ -374,7 +373,7 @@ paginacao.itensPorPagina | `itemsPerPage()`
 # CobV
 O `CobV` reúne os endpoints destinados a lidar com o gerenciamento de cobranças com vencimento.
 
-> A documentação oficial do Banco Central do Brasil sobre os requests a serem enviados para cada endpoint pode 
+> A documentação oficial do Banco Central do Brasil sobre os requests a serem enviados para cada endpoint pode
 > ser visualizada [aqui](https://bacen.github.io/pix-api/index.html#/CobV)
 
 Para utilizar estes endpoints, utilize o método `cobv()`, da classe `Junges\Pix\Pix`:
@@ -550,7 +549,7 @@ paginacao.paginaAtual | `currentPage()`
 paginacao.itensPorPagina | `itemsPerPage()`
 ---
 
-## Recuperar location do 
+## Recuperar location do
 Para consultar a location de um payload, você deve utilizar o método `getById()`:
 
 ```php
@@ -565,7 +564,7 @@ informando o id da location:
 $detach = \Junges\Pix\Pix::payloadLocation()->detachChargeFromLocation('payload-location-id')->json();
 ```
 
-ecutado com sucesso, a entidade `loc` não apresentará mais um `transaction_id`, 
+ecutado com sucesso, a entidade `loc` não apresentará mais um `transaction_id`,
 se apresentava anteriormente à chamada. Adicionalmente, a entidade `cob` ou `cobv` associada ao `txid` desvinculado também passará a não mais apresentar um location. Esta operação não altera o `status` da `cob` ou `cobv` em questão.
 
 # Pix recebidos
@@ -584,7 +583,7 @@ Você pode consultar um pix recebido através do id end to end (e2eid):
 $pix = \Junges\Pix\Pix::receivedPix()->getBye2eid('pix-e2eid')->json()
 ```
 
-## Consultar pix recebidos 
+## Consultar pix recebidos
 Para consultar a lista de todos os pix recebidos, com parâmetros como inicio, fim, status e outros, utilize o método `all()`,
 passando os filtros necessários. Os filtros `inicio` e `fim` são obrigatórios para todas as requisição neste endpoint. Este pacote
 disponibiliza uma api para aplicação de filtros na requisição, bastando instanciar uma nova classe para os filtros desejados e aplicá-los
@@ -695,7 +694,7 @@ paginacao.itensPorPagina | `itemsPerPage()`
 
 # Configurando Endpoints
 Para configurar endpoints específicos para cada PSP, você precisa criar um `EndpointResolver` para cada PSP que não segue a convenção do BACEN.
-Para criar um endpoint Resolver, crie um classe com o nome desejado e implemente a interface `CanResolveEndpoints`, ou, simplesmente extenda a class `Endpoints`, 
+Para criar um endpoint Resolver, crie um classe com o nome desejado e implemente a interface `CanResolveEndpoints`, ou, simplesmente extenda a class `Endpoints`,
 disponível neste pacote. Ela fornece os endpoints necessários, e você pode copiar o array de endpoints e alterar o necessário para o seu PSP.
 
 ```php

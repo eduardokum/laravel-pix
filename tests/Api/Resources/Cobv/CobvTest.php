@@ -1,16 +1,16 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Resources\Cobv;
+namespace Eduardokum\LaravelPix\Tests\Api\Resources\Cobv;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\CobvFilters;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Pix;
-use Junges\Pix\Psp;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\CobvFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Psp;
+use Eduardokum\LaravelPix\Tests\TestCase;
 use Mockery as m;
 
 class CobvTest extends TestCase

@@ -1,15 +1,15 @@
 <?php
 
-namespace Junges\Pix\Api\Resources\ReceivedPix;
+namespace Eduardokum\LaravelPix\Api\Resources\ReceivedPix;
 
 use Illuminate\Http\Client\Response;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Api\Contracts\ConsumesReceivedPixEndpoints;
-use Junges\Pix\Api\Contracts\FilterApiRequests;
-use Junges\Pix\Events\ReceivedPix\RefundRequestedEvent;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Support\Endpoints;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesReceivedPixEndpoints;
+use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Events\ReceivedPix\RefundRequestedEvent;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use RuntimeException;
 
 class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixEndpoints

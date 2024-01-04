@@ -1,12 +1,12 @@
 <?php
 
-namespace Junges\Pix\Http\Controllers;
+namespace Eduardokum\LaravelPix\Http\Controllers;
 
-use Junges\Pix\Exceptions\InvalidPixKeyException;
-use Junges\Pix\Exceptions\PixException;
-use Junges\Pix\Http\Requests\CreateQrCodeRequest;
-use Junges\Pix\Payload;
-use Junges\Pix\Pix;
+use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
+use Eduardokum\LaravelPix\Exceptions\PixException;
+use Eduardokum\LaravelPix\Http\Requests\CreateQrCodeRequest;
+use Eduardokum\LaravelPix\Payload;
+use Eduardokum\LaravelPix\Pix;
 use Symfony\Component\HttpFoundation\Response;
 
 class PixController

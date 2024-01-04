@@ -1,8 +1,8 @@
 <?php
 
-namespace Junges\Pix\Exceptions\Psp;
+namespace Eduardokum\LaravelPix\Exceptions\Psp;
 
-use Junges\Pix\Exceptions\PixException;
+use Eduardokum\LaravelPix\Exceptions\PixException;
 
 class InvalidPspException extends PixException
 {

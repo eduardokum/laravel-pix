@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Facades;
+namespace Eduardokum\LaravelPix\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Junges\Pix\Api\Features\PayloadLocation\PayloadLocation;
+use Eduardokum\LaravelPix\Api\Features\PayloadLocation\PayloadLocation;
 
 /**
  * Class ApiConsumes.

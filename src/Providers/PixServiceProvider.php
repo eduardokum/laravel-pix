@@ -1,24 +1,24 @@
 <?php
 
-namespace Junges\Pix\Providers;
+namespace Eduardokum\LaravelPix\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Auth;
-use Junges\Pix\Api\Resources\Cob\Cob;
-use Junges\Pix\Api\Resources\Cobv\Cobv;
-use Junges\Pix\Api\Resources\PayloadLocation\PayloadLocation;
-use Junges\Pix\Api\Resources\ReceivedPix\ReceivedPix;
-use Junges\Pix\Api\Resources\Webhook\Webhook;
-use Junges\Pix\Facades\ApiFacade;
-use Junges\Pix\Facades\CobFacade;
-use Junges\Pix\Facades\CobvFacade;
-use Junges\Pix\Facades\PayloadLocationFacade;
-use Junges\Pix\Facades\ReceivedPixFacade;
-use Junges\Pix\Facades\WebhookFacade;
-use Junges\Pix\LaravelPix;
-use Junges\Pix\QrCodeGenerator;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Auth;
+use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
+use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
+use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
+use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
+use Eduardokum\LaravelPix\Api\Resources\Webhook\Webhook;
+use Eduardokum\LaravelPix\Facades\ApiFacade;
+use Eduardokum\LaravelPix\Facades\CobFacade;
+use Eduardokum\LaravelPix\Facades\CobvFacade;
+use Eduardokum\LaravelPix\Facades\PayloadLocationFacade;
+use Eduardokum\LaravelPix\Facades\ReceivedPixFacade;
+use Eduardokum\LaravelPix\Facades\WebhookFacade;
+use Eduardokum\LaravelPix\LaravelPix;
+use Eduardokum\LaravelPix\QrCodeGenerator;
 
 class PixServiceProvider extends ServiceProvider
 {
@@ -26,53 +26,17 @@ class PixServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->registerRoutes();
-
-        $this->registerViews();
-
-        $this->publishFiles();
-
-        $this->bootBladeDirectives();
+        $this->publishes([
+            __DIR__.'/../../config/laravel-pix.php' => config_path('laravel-pix.php'),
+        ], 'laravel-pix-config');
     }
 
     public function register()
     {
         LaravelPix::generatesQrCodeUsing(QrCodeGenerator::class);
         LaravelPix::authenticatesUsing(Auth::class);
-
         LaravelPix::useAsDefaultPsp('default');
-
         $this->registerFacades();
-    }
-
-    private function publishFiles(): void
-    {
-        $this->publishes([
-            __DIR__.'/../../config/laravel-pix.php' => config_path('laravel-pix.php'),
-        ], 'laravel-pix-config');
-
-        $this->publishes([
-            __DIR__.'/../../public' => public_path('vendor/laravel-pix'),
-        ], 'laravel-pix-assets');
-    }
-
-    private function bootBladeDirectives(): void
-    {
-        Blade::directive('laravelPixAssets', function () {
-            $path = asset('vendor/laravel-pix/css/app.css');
-
-            return "<link rel='stylesheet' href='{$path}'>";
-        });
-    }
-
-    private function registerRoutes(): void
-    {
-        $this->loadRoutesFrom(__DIR__.'/../../routes/laravel-pix-routes.php');
-    }
-
-    private function registerViews(): void
-    {
-        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'laravel-pix');
     }
 
     private function registerFacades(): void

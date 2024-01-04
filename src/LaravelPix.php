@@ -1,11 +1,10 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
-use Junges\Pix\Contracts\GeneratesQrCode;
-use Junges\Pix\Providers\PixServiceProvider;
-use Junges\Pix\Api\Contracts\AuthenticatesPSPs;
-use Junges\Pix\Api\Contracts\AuthenticatesBankingPSPs;
+use Eduardokum\LaravelPix\Contracts\GeneratesQrCode;
+use Eduardokum\LaravelPix\Providers\PixServiceProvider;
+use Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs;
 
 class LaravelPix
 {
@@ -37,16 +36,6 @@ class LaravelPix
     public static function authenticatesUsing(string $callback): void
     {
         app()->singleton(AuthenticatesPSPs::class, $callback);
-    }
-
-    /**
-     * Defines which callback should be used to authenticate to PSPs.
-     *
-     * @param string $callback
-     */
-    public static function authenticatesBankingUsing(string $callback): void
-    {
-        app()->singleton(AuthenticatesBankingPSPs::class, $callback);
     }
 
     /**

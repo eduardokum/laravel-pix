@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Facades;
+namespace Eduardokum\LaravelPix\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Junges\Pix\Api\Api;
+use Eduardokum\LaravelPix\Api\Api;
 
 /**
  * Class ApiConsumes.
@@ -12,6 +12,8 @@ use Junges\Pix\Api\Api;
  * @method static Api clientId(string $clientId);
  * @method static Api clientSecret(string $clientSecret);
  * @method static Api certificate(string $certificate);
+ * @method static Api certificateKey(string $certificate);
+ * @method static Api certificatePassword(string $certificate);
  * @method static mixed getOauth2Token();
  */
 class ApiFacade extends Facade

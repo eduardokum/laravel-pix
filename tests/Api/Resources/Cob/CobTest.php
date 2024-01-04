@@ -1,16 +1,16 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Resources\Cob;
+namespace Eduardokum\LaravelPix\Tests\Api\Resources\Cob;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\CobFilters;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Pix;
-use Junges\Pix\Psp;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\CobFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Psp;
+use Eduardokum\LaravelPix\Tests\TestCase;
 use Mockery as m;
 
 class CobTest extends TestCase

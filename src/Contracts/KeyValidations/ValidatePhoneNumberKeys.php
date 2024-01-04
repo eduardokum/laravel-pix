@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Contracts\KeyValidations;
+namespace Eduardokum\LaravelPix\Contracts\KeyValidations;
 
 interface ValidatePhoneNumberKeys
 {

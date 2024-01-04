@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
-use Junges\Pix\Exceptions\InvalidPixKeyException;
-use Junges\Pix\Exceptions\ParserException;
+use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
+use Eduardokum\LaravelPix\Exceptions\ParserException;
 
 class Parser
 {

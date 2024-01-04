@@ -1,15 +1,15 @@
 <?php
 
-namespace Junges\Pix\Api\Resources\Webhook;
+namespace Eduardokum\LaravelPix\Api\Resources\Webhook;
 
 use Illuminate\Http\Client\Response;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Api\Contracts\ConsumesWebhookEndpoints;
-use Junges\Pix\Api\Contracts\FilterApiRequests;
-use Junges\Pix\Events\Webhooks\WebhookCreatedEvent;
-use Junges\Pix\Events\Webhooks\WebhookDeletedEvent;
-use Junges\Pix\Support\Endpoints;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesWebhookEndpoints;
+use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Events\Webhooks\WebhookCreatedEvent;
+use Eduardokum\LaravelPix\Events\Webhooks\WebhookDeletedEvent;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use RuntimeException;
 
 class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests

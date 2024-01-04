@@ -1,8 +1,8 @@
 <?php
 
-namespace Junges\Pix\Api\Filters;
+namespace Eduardokum\LaravelPix\Api\Filters;
 
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 
 class WebhookFilters implements ApplyApiFilters
 {

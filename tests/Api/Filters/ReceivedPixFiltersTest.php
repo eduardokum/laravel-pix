@@ -1,11 +1,11 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Filters;
+namespace Eduardokum\LaravelPix\Tests\Api\Filters;
 
 use Illuminate\Support\Str;
-use Junges\Pix\Api\Filters\ReceivedPixFilters;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\ReceivedPixFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class ReceivedPixFiltersTest extends TestCase
 {

@@ -1,17 +1,18 @@
 {
-    "name": "jrodella/laravel-pix",
-    "description": "PIX integration with Laravel (This is a fork from: mateusjunges/laravel-pix)",
+    "name": "eduardokum/laravel-pix",
+    "description": "PIX integration with Laravel",
     "type": "library",
     "keywords": [
         "laravel",
-        "junges",
+        "Eduardokum",
         "pix",
         "bacen",
         "pix-api"
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "mpdf/qrcode": "^1.1",
+        "php": ">5.5.0",
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "symfony/psr-http-message-bridge": "^2.1"
     },
     "require-dev": {
@@ -21,26 +22,20 @@
         "ext-json": "*"
     },
     "license": "MIT",
-    "authors": [
-        {
-            "name": "mateusjunges",
-            "email": "mateus@junges.dev"
-        }
-    ],
     "autoload": {
         "psr-4": {
-            "Junges\\Pix\\": "src/"
+            "Eduardokum\\LaravelPix\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Junges\\Pix\\Tests\\": "tests/"
+            "Eduardokum\\LaravelPix\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Junges\\Pix\\Providers\\PixServiceProvider"
+                "Eduardokum\\LaravelPix\\Providers\\PixServiceProvider"
             ]
         }
     },

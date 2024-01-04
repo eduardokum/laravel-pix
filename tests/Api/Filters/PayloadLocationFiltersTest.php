@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Filters;
+namespace Eduardokum\LaravelPix\Tests\Api\Filters;
 
-use Junges\Pix\Api\Filters\PayloadLocationFilters;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\PayloadLocationFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class PayloadLocationFiltersTest extends TestCase
 {

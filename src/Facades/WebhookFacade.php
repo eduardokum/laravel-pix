@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Facades;
+namespace Eduardokum\LaravelPix\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Junges\Pix\Api\Features\Webhook\Webhook;
+use Eduardokum\LaravelPix\Api\Features\Webhook\Webhook;
 
 /**
  * Class ApiConsumes.

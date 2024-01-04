@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Events;
+namespace Eduardokum\LaravelPix\Events;
 
 class DynamicQrCodeCreatedEvent
 {

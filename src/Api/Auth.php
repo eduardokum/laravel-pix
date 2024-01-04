@@ -1,16 +1,17 @@
 <?php
 
-namespace Junges\Pix\Api;
+namespace Eduardokum\LaravelPix\Api;
 
 use Illuminate\Support\Facades\Http;
-use Junges\Pix\Api\Contracts\AuthenticatesPSPs;
-use Junges\Pix\Providers\PixServiceProvider;
+use Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs;
+use Eduardokum\LaravelPix\Providers\PixServiceProvider;
 
 class Auth implements AuthenticatesPSPs
 {
     protected string $clientId;
     protected string $clientSecret;
     protected string $certificate;
+    protected string $certificateKey;
     protected string $currentPspOauthEndpoint;
     protected ?string $certificatePassword;
 
@@ -18,6 +19,7 @@ class Auth implements AuthenticatesPSPs
         string $clientId,
         string $clientSecret,
         string $certificate,
+        string $certificateKey,
         string $currentPspOauthEndpoint,
         ?string $certificatePassword
     ) {
@@ -26,6 +28,7 @@ class Auth implements AuthenticatesPSPs
         $this->certificate = $certificate;
         $this->currentPspOauthEndpoint = $currentPspOauthEndpoint;
         $this->certificatePassword = $certificatePassword;
+        $this->certificateKey = $certificateKey;
     }
 
     public function getToken(string $scopes = null)
@@ -38,10 +41,11 @@ class Auth implements AuthenticatesPSPs
         ]);
 
         if ($this->shouldVerifySslCertificate()) {
-            $client->withOptions([
+            $client->withOptions(array_filter([
                 'verify' => $this->certificate,
                 'cert'   => $this->getCertificate(),
-            ]);
+                'ssl_key'   => $this->certificateKey,
+            ]));
         }
 
         return $client->post($this->getOauthEndpoint(), [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Exceptions;
+namespace Eduardokum\LaravelPix\Exceptions;
 
 class ValidationException extends PixException
 {

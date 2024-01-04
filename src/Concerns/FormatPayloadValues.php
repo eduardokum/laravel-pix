@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Concerns;
+namespace Eduardokum\LaravelPix\Concerns;
 
 trait FormatPayloadValues
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
-use Junges\Pix\Concerns\InteractsWithDynamicPayload;
-use Junges\Pix\Contracts\PixPayloadContract;
-use Junges\Pix\Exceptions\InvalidTransactionIdException;
+use Eduardokum\LaravelPix\Concerns\InteractsWithDynamicPayload;
+use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
+use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 
 class DynamicPayload implements PixPayloadContract
 {

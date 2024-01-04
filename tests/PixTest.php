@@ -1,15 +1,15 @@
 <?php
 
-namespace Junges\Pix\Tests;
+namespace Eduardokum\LaravelPix\Tests;
 
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Resources\Cob\Cob;
-use Junges\Pix\Api\Resources\Cobv\Cobv;
-use Junges\Pix\Api\Resources\LoteCobv\LoteCobv;
-use Junges\Pix\Api\Resources\PayloadLocation\PayloadLocation;
-use Junges\Pix\Api\Resources\ReceivedPix\ReceivedPix;
-use Junges\Pix\Api\Resources\Webhook\Webhook;
-use Junges\Pix\Pix;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
+use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
+use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
+use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
+use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
+use Eduardokum\LaravelPix\Api\Resources\Webhook\Webhook;
+use Eduardokum\LaravelPix\Pix;
 
 class PixTest extends TestCase
 {

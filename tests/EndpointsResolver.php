@@ -1,8 +1,8 @@
 <?php
 
-namespace Junges\Pix\Tests;
+namespace Eduardokum\LaravelPix\Tests;
 
-use Junges\Pix\Support\Endpoints;
+use Eduardokum\LaravelPix\Support\Endpoints;
 
 class EndpointsResolver extends Endpoints
 {

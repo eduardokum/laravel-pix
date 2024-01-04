@@ -1,12 +1,12 @@
 <?php
 
-namespace Junges\Pix\Tests\Api;
+namespace Eduardokum\LaravelPix\Tests\Api;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Http;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Auth;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Auth;
+use Eduardokum\LaravelPix\Tests\TestCase;
 use Mockery as m;
 
 class ApiTest extends TestCase

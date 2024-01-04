@@ -19,12 +19,6 @@ return [
     'qr_code_size' => 200,
 
     /*
-     * Você pode definir um middleware para proteger a rota disponibilizada para gerar QR codes.
-     * O nome registrado para este middleware precisa ser definido aqui.
-     */
-    'create_qr_code_route_middleware' => '',
-
-    /*
      * Informações do Prestador de serviço de pagamento (PSP) que você está utilizando.
      * Você pode utilizar vários psps com este pacote, bastando adicionar um novo array com configurações.
      * base_url: URL base da API do seu PSP.
@@ -36,18 +30,13 @@ return [
             'oauth_token_url'                 => env('LARAVEL_PIX_PSP_OAUTH_URL', false),
             'oauth_bearer_token'              => env('LARAVEL_PIX_OAUTH2_BEARER_TOKEN'),
             'ssl_certificate'                 => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
+            'ssl_certificate_key'             => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE_KEY'),
+            'ssl_certificate_password'        => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE_PASSWORD'),
             'client_secret'                   => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
             'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
             'pix_key'                         => env('LARAVEL_PIX_PSP_PIX_KEY'),
-            'banking_base_url'                => env('LARAVEL_PIX_BANKING_PSP_BASE_URL'),
-            'banking_oauth_token_url'         => env('LARAVEL_PIX_BANKING_PSP_OAUTH_URL', false),
-            'banking_ssl_certificate'         => env('LARAVEL_PIX_BANKING_PSP_SSL_CERTIFICATE'),
-            'banking_client_secret'           => env('LARAVEL_PIX_BANKING_PSP_CLIENT_SECRET'),
-            'banking_client_id'               => env('LARAVEL_PIX_BANKING_PSP_CLIENT_ID'),
-            'authentication_class'            => \Junges\Pix\Api\Contracts\AuthenticatesPSPs::class,
-            'banking_authentication_class'    => \Junges\Pix\Api\Contracts\AuthenticatesBankingPSPs::class,
-            'resolve_endpoints_using'         => \Junges\Pix\Support\Endpoints::class,
-            'resolve_banking_endpoints_using' => \Junges\Pix\Support\BankingEndpoints::class,
+            'authentication_class'            => \Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs::class,
+            'resolve_endpoints_using'         => \Eduardokum\LaravelPix\Support\Endpoints::class,
         ],
     ],
 ];

@@ -1,9 +1,9 @@
 <?php
 
-namespace Junges\Pix\Tests\Api\Filters;
+namespace Eduardokum\LaravelPix\Tests\Api\Filters;
 
-use Junges\Pix\Api\Filters\WebhookFilters;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\Api\Filters\WebhookFilters;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class WebhookFiltersTest extends TestCase
 {

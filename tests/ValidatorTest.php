@@ -1,8 +1,8 @@
 <?php
 
-namespace Junges\Pix\Tests;
+namespace Eduardokum\LaravelPix\Tests;
 
-use Junges\Pix\Validator;
+use Eduardokum\LaravelPix\Validator;
 
 class ValidatorTest extends TestCase
 {

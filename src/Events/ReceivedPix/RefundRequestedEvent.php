@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Events\ReceivedPix;
+namespace Eduardokum\LaravelPix\Events\ReceivedPix;
 
 class RefundRequestedEvent
 {

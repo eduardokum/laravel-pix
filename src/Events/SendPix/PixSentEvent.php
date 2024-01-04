@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Events\SendPix;
+namespace Eduardokum\LaravelPix\Events\SendPix;
 
 class PixSentEvent
 {

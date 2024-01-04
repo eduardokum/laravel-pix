@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix\Concerns;
+namespace Eduardokum\LaravelPix\Concerns;
 
-use Junges\Pix\Exceptions\InvalidMerchantInformationException;
-use Junges\Pix\Exceptions\InvalidTransactionIdException;
-use Junges\Pix\Pix;
+use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
+use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
+use Eduardokum\LaravelPix\Pix;
 
 trait InteractsWithPayload
 {
@@ -72,7 +72,7 @@ trait InteractsWithPayload
     }
 
     /**
-     * @throws \Junges\Pix\Exceptions\PixException
+     * @throws \Eduardokum\LaravelPix\Exceptions\PixException
      */
     protected function getMerchantName(): string
     {

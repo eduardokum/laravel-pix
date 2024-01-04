@@ -1,14 +1,14 @@
 <?php
 
-namespace Junges\Pix\Api\Resources\Cob;
+namespace Eduardokum\LaravelPix\Api\Resources\Cob;
 
 use Illuminate\Http\Client\Response;
-use Junges\Pix\Api\Api;
-use Junges\Pix\Api\Contracts\ApplyApiFilters;
-use Junges\Pix\Api\Contracts\ConsumesCobEndpoints;
-use Junges\Pix\Api\Contracts\FilterApiRequests;
-use Junges\Pix\Exceptions\ValidationException;
-use Junges\Pix\Support\Endpoints;
+use Eduardokum\LaravelPix\Api\Api;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesCobEndpoints;
+use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use RuntimeException;
 
 class Cob extends Api implements ConsumesCobEndpoints, FilterApiRequests

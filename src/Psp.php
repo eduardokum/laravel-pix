@@ -1,14 +1,16 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
-use Junges\Pix\Contracts\CanResolveEndpoints;
-use Junges\Pix\Exceptions\Psp\InvalidPspException;
+use Eduardokum\LaravelPix\Contracts\CanResolveEndpoints;
+use Eduardokum\LaravelPix\Exceptions\Psp\InvalidPspException;
+use Illuminate\Support\Arr;
 
 class Psp
 {
     public static string $defaultPsp = 'default';
     public ?string $currentPsp = null;
+    private ?array $onTheFlyPsp = null;
 
     public static function getConfig(): Psp
     {
@@ -18,6 +20,14 @@ class Psp
     public static function defaultPsp($psp)
     {
         self::$defaultPsp = $psp;
+    }
+
+    public function onTheFlyPsp(array $configs = null): Psp
+    {
+        $this->currentPsp = 'on-the-fly';
+        $this->onTheFlyPsp = $configs;
+
+        return $this;
     }
 
     public function currentPsp(string $psp = null): Psp
@@ -49,19 +59,19 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['oauth_token_url'] ?? '';
     }
 
-    public function getBankingOauthTokenUrl(): string
-    {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_oauth_token_url'] ?? '';
-    }
-
     public function getPspSSLCertificate(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['ssl_certificate'] ?? '';
     }
 
-    public function getBankingPspSSLCertificate(): string
+    public function getPspSSLCertificateKey(): string
     {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_ssl_certificate'] ?? '';
+        return $this->getPspConfig($this->getCurrentPsp())['ssl_certificate_key'] ?? '';
+    }
+
+    public function getPspSSLCertificatePassword(): string
+    {
+        return $this->getPspConfig($this->getCurrentPsp())['ssl_certificate_password'] ?? '';
     }
 
     public function getPspBaseUrl(): string
@@ -84,21 +94,6 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['pix_key'] ?? '';
     }
 
-    public function getPspBankingBaseUrl(): string
-    {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_base_url'] ?? '';
-    }
-
-    public function getPspBankingClientId(): string
-    {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_client_id'] ?? '';
-    }
-
-    public function getPspBankingClientSecret(): string
-    {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_client_secret'] ?? '';
-    }
-
     public function getPspOauthBearerToken(): string
     {
         return $this->getPspConfig($this->getCurrentPsp())['oauth_bearer_token'] ?? '';
@@ -109,23 +104,17 @@ class Psp
         return $this->getPspConfig($this->getCurrentPsp())['authentication_class'] ?? '';
     }
 
-    public function getBankingAuthenticationClass(): string
-    {
-        return $this->getPspConfig($this->getCurrentPsp())['banking_authentication_class'] ?? '';
-    }
-
     public function getEndpointsResolver(): CanResolveEndpoints
     {
         return app($this->getPspConfig($this->getCurrentPsp())['resolve_endpoints_using']);
     }
 
-    public function getBankingEndpointsResolver(): CanResolveEndpoints
-    {
-        return app($this->getPspConfig($this->getCurrentPsp())['resolve_banking_endpoints_using']);
-    }
-
     private function getPspConfig(string $psp)
     {
+        if ($psp == 'on-the-fly') {
+            return Arr::only($this->onTheFlyPsp, array_keys(config("laravel-pix.psp.default"))) + config("laravel-pix.psp.default");
+        }
+
         throw_if(!$this->validatePsp($this->getCurrentPsp()), InvalidPspException::pspNotFound($this->getCurrentPsp()));
 
         return config("laravel-pix.psp.{$psp}");

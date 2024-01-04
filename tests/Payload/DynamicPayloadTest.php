@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix\Tests\Payload;
+namespace Eduardokum\LaravelPix\Tests\Payload;
 
 use Illuminate\Support\Str;
-use Junges\Pix\DynamicPayload;
-use Junges\Pix\Tests\TestCase;
+use Eduardokum\LaravelPix\DynamicPayload;
+use Eduardokum\LaravelPix\Tests\TestCase;
 
 class DynamicPayloadTest extends TestCase
 {

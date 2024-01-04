@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Api\Contracts;
+namespace Eduardokum\LaravelPix\Api\Contracts;
 
 interface ConsumesPixApi
 {

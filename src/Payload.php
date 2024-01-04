@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
-use Junges\Pix\Concerns\InteractsWithPayload;
-use Junges\Pix\Contracts\PixPayloadContract;
+use Eduardokum\LaravelPix\Concerns\InteractsWithPayload;
+use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
 
 class Payload implements PixPayloadContract
 {

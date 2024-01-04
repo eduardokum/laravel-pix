@@ -1,11 +1,11 @@
 <?php
 
-namespace Junges\Pix\Facades;
+namespace Eduardokum\LaravelPix\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Junges\Pix\Api\Features\Cobv\Cobv;
-use Junges\Pix\Api\Features\Cobv\CobvRequest;
-use Junges\Pix\Api\Features\Cobv\UpdateCobvRequest;
+use Eduardokum\LaravelPix\Api\Features\Cobv\Cobv;
+use Eduardokum\LaravelPix\Api\Features\Cobv\CobvRequest;
+use Eduardokum\LaravelPix\Api\Features\Cobv\UpdateCobvRequest;
 
 /**
  * Class ApiConsumes.

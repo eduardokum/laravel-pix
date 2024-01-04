@@ -1,6 +1,6 @@
 <?php
 
-namespace Junges\Pix\Http\Requests;
+namespace Eduardokum\LaravelPix\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

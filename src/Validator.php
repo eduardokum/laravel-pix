@@ -1,10 +1,10 @@
 <?php
 
-namespace Junges\Pix;
+namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
-use Junges\Pix\Contracts\KeyValidations\PerformKeyValidations;
-use Junges\Pix\Exceptions\InvalidPixKeyException;
+use Eduardokum\LaravelPix\Contracts\KeyValidations\PerformKeyValidations;
+use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
 
 class Validator implements PerformKeyValidations
 {
