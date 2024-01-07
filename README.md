@@ -111,7 +111,6 @@ return [
             'ssl_certificate'                 => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
             'client_secret'                   => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
             'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
-            'pix_key'                         => env('LARAVEL_PIX_PSP_PIX_KEY'),
             'authentication_class'            => \Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs::class,
             'resolve_endpoints_using'         => \Eduardokum\LaravelPix\Support\Endpoints::class,
         ]
@@ -237,7 +236,7 @@ use Junges\Pix\Api\Auth;
 
 class CustomAuthentication extends Auth
 {
-    public function getToken(string $scopes = null)
+    public function getToken(string $scope = null)
     {
         // Metodo para retornar o token de acesso
     }

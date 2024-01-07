@@ -2,9 +2,9 @@
 
 namespace Eduardokum\LaravelPix\Concerns;
 
-use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
-use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
+use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
 
 trait InteractsWithDynamicPayload
 {
@@ -36,7 +36,7 @@ trait InteractsWithDynamicPayload
 
     protected function getTransactionAmount()
     {
-        return !empty($this->amount)
+        return ! empty($this->amount)
             ? $this->formatValue(Pix::TRANSACTION_AMOUNT, $this->amount)
             : null;
     }
@@ -92,19 +92,19 @@ trait InteractsWithDynamicPayload
     public function toStringWithoutCrc16(): string
     {
         return $this->getPayloadFormat()
-            .$this->getPointOfInitializationMethod()
-            .$this->getMerchantAccountInformation()
-            .$this->getMerchantCategoryCode()
-            .$this->gettransactionCurrency()
-            .$this->getTransactionAmount()
-            .$this->getCountryCode()
-            .$this->getMerchantName()
-            .$this->getMerchantCity()
-            .$this->getAdditionalDataFieldTemplate();
+            . $this->getPointOfInitializationMethod()
+            . $this->getMerchantAccountInformation()
+            . $this->getMerchantCategoryCode()
+            . $this->gettransactionCurrency()
+            . $this->getTransactionAmount()
+            . $this->getCountryCode()
+            . $this->getMerchantName()
+            . $this->getMerchantCity()
+            . $this->getAdditionalDataFieldTemplate();
     }
 
     protected function buildPayload(): string
     {
-        return $this->toStringWithoutCrc16().$this->getCRC16($this->toStringWithoutCrc16());
+        return $this->toStringWithoutCrc16() . $this->getCRC16($this->toStringWithoutCrc16());
     }
 }

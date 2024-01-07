@@ -13,8 +13,11 @@ class LoteCobvFilter implements ApplyApiFilters
     const PAGINATION_ITEMS_PER_PAGE = 'paginacao.itensPorPagina';
 
     private string $start;
+
     private string $end;
+
     private int $currentPage;
+
     private int $itemsPerPage;
 
     public function startingAt(string $start): LoteCobvFilter
@@ -61,11 +64,11 @@ class LoteCobvFilter implements ApplyApiFilters
             self::END   => $this->end,
         ];
 
-        if (!empty($this->currentPage)) {
+        if (! empty($this->currentPage)) {
             $filters[self::PAGINATION_CURRENT_PAGE] = $this->currentPage;
         }
 
-        if (!empty($this->itemsPerPage)) {
+        if (! empty($this->itemsPerPage)) {
             $filters[self::PAGINATION_ITEMS_PER_PAGE] = $this->itemsPerPage;
         }
 

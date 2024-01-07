@@ -2,95 +2,35 @@
 
 namespace Eduardokum\LaravelPix\Api;
 
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
-use Eduardokum\LaravelPix\Api\Contracts\ConsumesPixApi;
-use Eduardokum\LaravelPix\Contracts\CanResolveEndpoints;
-use Eduardokum\LaravelPix\Providers\PixServiceProvider;
+use Illuminate\Support\Arr;
 use Eduardokum\LaravelPix\Psp;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\PendingRequest;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesPixApi;
+use Eduardokum\LaravelPix\Exceptions\TokenAbsentException;
 
 class Api implements ConsumesPixApi
 {
-    protected string $baseUrl;
-    protected string $clientId;
-    protected string $clientSecret;
-    protected ?string $certificate = null;
-    protected ?string $certificateKey = null;
-    protected ?string $certificatePassword = null;
-    protected ?string $oauthToken;
-    protected ?string $pixKey;
     protected array $additionalParams = [];
+
     protected array $additionalOptions = [];
+
+    protected ?string $oauthToken = null;
+
     protected Psp $psp;
-    protected CanResolveEndpoints $endpointsResolver;
-    protected bool $bypassCertificateVerification = false;
 
     public function __construct()
     {
         $this->psp = new Psp();
-
-        $this->oauthToken($this->psp->getPspOauthBearerToken())
-            ->certificate($this->psp->getPspSSLCertificate())
-            ->certificate($this->psp->getPspSSLCertificateKey())
-            ->certificate($this->psp->getPspSSLCertificatePassword())
-            ->baseUrl($this->psp->getPspBaseUrl())
-            ->clientId($this->psp->getPspClientId())
-            ->clientSecret($this->psp->getPspClientSecret())
-            ->pixKey($this->psp->getPspPixKey());
-    }
-
-    public function baseUrl(string $baseUrl): Api
-    {
-        $this->baseUrl = $baseUrl;
-
-        return $this;
-    }
-
-    public function clientId(string $clientId): Api
-    {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
-
-    public function clientSecret(string $clientSecret): Api
-    {
-        $this->clientSecret = $clientSecret;
-
-        return $this;
-    }
-
-    public function certificate(string $certificate): Api
-    {
-        $this->certificate = $certificate;
-
-        return $this;
-    }
-
-    public function certificateKey(string $certificateKey): Api
-    {
-        $this->certificateKey = $certificateKey;
-
-        return $this;
-    }
-
-    public function certificatePassword(string $certificatePassword): Api
-    {
-        $this->certificatePassword = $certificatePassword;
-
-        return $this;
     }
 
     public function oauthToken(?string $oauthToken): Api
     {
+        if (! $oauthToken) {
+            $oauthToken = Arr::get($this->getOauth2Token()->json(), 'access_token');
+        }
+
         $this->oauthToken = $oauthToken;
-
-        return $this;
-    }
-
-    public function pixKey(string $pixKey): Api
-    {
-        $this->pixKey = $pixKey;
 
         return $this;
     }
@@ -98,15 +38,7 @@ class Api implements ConsumesPixApi
     public function usingOnTheFlyPsp(array $pspConfigs): Api
     {
         $this->psp->onTheFlyPsp($pspConfigs);
-
-        $this->oauthToken($this->psp->getPspOauthBearerToken())
-            ->certificate($this->psp->getPspSSLCertificate())
-            ->certificateKey($this->psp->getPspSSLCertificateKey())
-            ->certificatePassword($this->psp->getPspSSLCertificatePassword())
-            ->baseUrl($this->psp->getPspBaseUrl())
-            ->clientId($this->psp->getPspClientId())
-            ->clientSecret($this->psp->getPspClientSecret())
-            ->pixKey($this->psp->getPspPixKey());
+        $this->additionals();
 
         return $this;
     }
@@ -114,15 +46,7 @@ class Api implements ConsumesPixApi
     public function usingPsp(string $psp): Api
     {
         $this->psp->currentPsp($psp);
-
-        $this->oauthToken($this->psp->getPspOauthBearerToken())
-            ->certificate($this->psp->getPspSSLCertificate())
-            ->certificateKey($this->psp->getPspSSLCertificateKey())
-            ->certificatePassword($this->psp->getPspSSLCertificatePassword())
-            ->baseUrl($this->psp->getPspBaseUrl())
-            ->clientId($this->psp->getPspClientId())
-            ->clientSecret($this->psp->getPspClientSecret())
-            ->pixKey($this->psp->getPspPixKey());
+        $this->additionals();
 
         return $this;
     }
@@ -147,40 +71,22 @@ class Api implements ConsumesPixApi
             'Cache-Control' => 'no-cache',
         ], $extraHeaders));
 
-        $options = [];
-        if ($this->shouldVerifySslCertificate()) {
-            $options['cert'] = $this->getCertificate();
-            $options['ssl_key'] = $this->certificateKey;
-        }
-        if ($this->shouldBypassCertificateVerification()){
-            $options['verify'] = false;
-        }
-        $client->withOptions(array_filter($options));
+        $client->withOptions([
+            'cert'    => $this->getPsp()->getCertificate(),
+            'ssl_key' => $this->getPsp()->getCurrentConfig('client_certificate_key'),
+            'verify'  => $this->getPsp()->shouldVerifySslCertificate() ? $this->getPsp()->getCurrentConfig('verify_certificate') : false,
+        ] + $this->additionalOptions);
+
+        throw_if(! $this->oauthToken, TokenAbsentException::uninformed());
 
         $client->withToken($this->oauthToken);
 
         return $client;
     }
 
-    protected function getCertificate()
+    public function getOauth2Token(string $scope = null)
     {
-        return $this->certificatePassword ?? false
-                ? [$this->certificate, $this->certificatePassword]
-                : $this->certificate;
-    }
-
-    public function getOauth2Token(string $scopes = null)
-    {
-        $authentication_class = $this->getPsp()->getAuthenticationClass();
-
-        return app($authentication_class, [
-            'clientId'                => $this->clientId,
-            'clientSecret'            => $this->clientSecret,
-            'certificate'             => $this->certificate,
-            'certificateKey'          => $this->certificateKey,
-            'certificatePassword'     => $this->certificatePassword,
-            'currentPspOauthEndpoint' => $this->psp->getOauthTokenUrl(),
-        ])->getToken();
+        return (new Auth($this->getPsp()))->getToken($scope);
     }
 
     public function withAdditionalParams(array $params): Api
@@ -204,38 +110,16 @@ class Api implements ConsumesPixApi
 
     protected function getEndpoint(string $endpoint): string
     {
-        return $endpoint.'?'.http_build_query($this->additionalParams);
+        return $endpoint . '?' . http_build_query($this->additionalParams);
     }
 
-    private function shouldVerifySslCertificate(): bool
+    private function additionals()
     {
-        return PixServiceProvider::$verifySslCertificate;
-    }
-
-    private function shouldBypassCertificateVerification(): bool
-    {
-        return $this->bypassCertificateVerification;
-    }
-
-    public function bypassCertificateVerification()
-    {
-        $this->bypassCertificateVerification = true;
-
-        return $this;
-    }
-
-    public function getBaseUrl(): string
-    {
-        return $this->baseUrl;
-    }
-
-    public function getClientId(): string
-    {
-        return $this->clientId;
-    }
-
-    public function getPixKey(): string
-    {
-        return $this->pixKey;
+        if (is_array($this->psp->getCurrentConfig('additional_params')) && count($this->psp->getCurrentConfig('additional_params')) > 0) {
+            $this->additionalParams = $this->psp->getCurrentConfig('additional_params');
+        }
+        if (is_array($this->psp->getCurrentConfig('additional_options')) && count($this->psp->getCurrentConfig('additional_options')) > 0) {
+            $this->additionalOptions = $this->psp->getCurrentConfig('additional_options');
+        }
     }
 }

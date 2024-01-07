@@ -1,10 +1,10 @@
 <?php
 
-namespace Eduardokum\LaravelPix;
+namespace Eduardokum\LaravelPix\Support;
 
 use Illuminate\Support\Str;
-use Eduardokum\LaravelPix\Contracts\KeyValidations\PerformKeyValidations;
 use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
+use Eduardokum\LaravelPix\Contracts\KeyValidations\PerformKeyValidations;
 
 class Validator implements PerformKeyValidations
 {
@@ -86,9 +86,9 @@ class Validator implements PerformKeyValidations
     {
         $phone = str_replace(config('laravel-pix.country_phone_prefix', '+55'), '', $phone);
         $phone = preg_replace('/[^\d]+/', '', $phone);
-        $phone = config('laravel-pix.country_phone_prefix', '+55').$phone;
+        $phone = config('laravel-pix.country_phone_prefix', '+55') . $phone;
 
-        if (!preg_match('/^(\+55)?(\d{10,11})$/', $phone)) {
+        if (! preg_match('/^(\+55)?(\d{10,11})$/', $phone)) {
             return false;
         }
 
@@ -100,7 +100,7 @@ class Validator implements PerformKeyValidations
      */
     public static function validate(string $type, string $key): bool
     {
-        if (!in_array($type, Pix::KEY_TYPES)) {
+        if (! in_array($type, Pix::KEY_TYPES)) {
             throw InvalidPixKeyException::invalidKeyType($type);
         }
 

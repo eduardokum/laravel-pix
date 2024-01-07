@@ -4,7 +4,7 @@ namespace Eduardokum\LaravelPix\Api\Contracts;
 
 interface AuthenticatesPSPs
 {
-    public function getToken(string $scopes = null);
+    public function getToken(string $scope = null);
 
     public function getOauthEndpoint(): string;
 }

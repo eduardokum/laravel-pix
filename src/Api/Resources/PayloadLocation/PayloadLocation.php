@@ -2,14 +2,14 @@
 
 namespace Eduardokum\LaravelPix\Api\Resources\PayloadLocation;
 
-use Illuminate\Http\Client\Response;
-use Eduardokum\LaravelPix\Api\Api;
-use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
-use Eduardokum\LaravelPix\Api\Contracts\ConsumesPayloadLocationEndpoints;
-use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
-use Eduardokum\LaravelPix\Exceptions\ValidationException;
-use Eduardokum\LaravelPix\Support\Endpoints;
 use RuntimeException;
+use Eduardokum\LaravelPix\Api\Api;
+use Illuminate\Http\Client\Response;
+use Eduardokum\LaravelPix\Support\Endpoints;
+use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
+use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesPayloadLocationEndpoints;
 
 class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, FilterApiRequests
 {
@@ -17,7 +17,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
 
     public function withFilters($filters): PayloadLocation
     {
-        if (!is_array($filters) && !$filters instanceof ApplyApiFilters) {
+        if (! is_array($filters) && ! $filters instanceof ApplyApiFilters) {
             throw new RuntimeException("Filters should be an instance of 'FilterApiRequests' or an array.");
         }
 
@@ -31,8 +31,8 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
     public function create(string $loc): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->baseUrl
-            .$this->resolveEndpoint(Endpoints::CREATE_PAYLOAD_LOCATION)
+            $this->getPsp()->getCurrentConfig('base_url')
+            . $this->resolveEndpoint(Endpoints::CREATE_PAYLOAD_LOCATION)
         );
 
         return $this->request()->post($endpoint, ['tipoCob' => $loc]);
@@ -41,9 +41,9 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
     public function getById(string $id): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->baseUrl
-            .$this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION)
-            .$id
+            $this->getPsp()->getCurrentConfig('base_url')
+            . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION)
+            . $id
         );
 
         return $this->request()->get($endpoint, $this->filters);
@@ -52,10 +52,10 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
     public function detachChargeFromLocation(string $id): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->baseUrl.
+            $this->getPsp()->getCurrentConfig('base_url') .
             $this->resolveEndpoint(Endpoints::DETACH_CHARGE_FROM_LOCATION)
-            .$id
-            .$this->resolveEndpoint(Endpoints::PAYLOAD_LOCATION_TXID)
+            . $id
+            . $this->resolveEndpoint(Endpoints::PAYLOAD_LOCATION_TXID)
         );
 
         return $this->request()->delete($endpoint);
@@ -71,7 +71,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
             ValidationException::filtersAreRequired()
         );
 
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION));
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION));
 
         return $this->request()->get($endpoint, $this->filters);
     }

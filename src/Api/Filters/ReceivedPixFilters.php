@@ -18,13 +18,21 @@ class ReceivedPixFilters implements ApplyApiFilters
     const PAGINATION_ITEMS_PER_PAGE = 'paginacao.itensPorPagina';
 
     private string $start;
+
     private string $end;
+
     private string $transactionId;
+
     private string $transactionIdPresent;
+
     private string $refundPresent;
+
     private string $cpf;
+
     private string $cnpj;
+
     private string $currentPage;
+
     private string $itemsPerPage;
 
     public function startingAt(string $start): ReceivedPixFilters
@@ -120,31 +128,31 @@ class ReceivedPixFilters implements ApplyApiFilters
             self::END   => $this->end,
         ];
 
-        if (!empty($this->transactionId)) {
+        if (! empty($this->transactionId)) {
             $filters[self::TXID] = $this->transactionId;
         }
 
-        if (!empty($this->transactionIdPresent)) {
+        if (! empty($this->transactionIdPresent)) {
             $filters[self::TXID_PRESENT] = $this->transactionIdPresent;
         }
 
-        if (!empty($this->refundPresent)) {
+        if (! empty($this->refundPresent)) {
             $filters[self::REFUND_PRESENT] = $this->refundPresent;
         }
 
-        if (!empty($this->cpf)) {
+        if (! empty($this->cpf)) {
             $filters[self::CPF] = $this->cpf;
         }
 
-        if (!empty($this->cnpj)) {
+        if (! empty($this->cnpj)) {
             $filters[self::CNPJ] = $this->cnpj;
         }
 
-        if (!empty($this->currentPage)) {
+        if (! empty($this->currentPage)) {
             $filters[self::PAGINATION_CURRENT_PAGE] = $this->currentPage;
         }
 
-        if (!empty($this->itemsPerPage)) {
+        if (! empty($this->itemsPerPage)) {
             $filters[self::PAGINATION_ITEMS_PER_PAGE] = $this->itemsPerPage;
         }
 

@@ -48,7 +48,7 @@ class ApiTest extends TestCase
 
 class DummyPspAuth extends Auth
 {
-    public function getToken(string $scopes = null)
+    public function getToken(string $scope = null)
     {
         return 'test_token';
     }

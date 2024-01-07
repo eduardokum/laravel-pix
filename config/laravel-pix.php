@@ -26,17 +26,24 @@ return [
      */
     'psp' => [
         'default' => [
-            'base_url'                        => env('LARAVEL_PIX_PSP_BASE_URL'),
-            'oauth_token_url'                 => env('LARAVEL_PIX_PSP_OAUTH_URL', false),
-            'oauth_bearer_token'              => env('LARAVEL_PIX_OAUTH2_BEARER_TOKEN'),
-            'ssl_certificate'                 => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE'),
-            'ssl_certificate_key'             => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE_KEY'),
-            'ssl_certificate_password'        => env('LARAVEL_PIX_PSP_SSL_CERTIFICATE_PASSWORD'),
-            'client_secret'                   => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
-            'client_id'                       => env('LARAVEL_PIX_PSP_CLIENT_ID'),
-            'pix_key'                         => env('LARAVEL_PIX_PSP_PIX_KEY'),
-            'authentication_class'            => \Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs::class,
-            'resolve_endpoints_using'         => \Eduardokum\LaravelPix\Support\Endpoints::class,
+            'base_url'                    => env('LARAVEL_PIX_PSP_BASE_URL'),
+            'oauth_token_url'             => env('LARAVEL_PIX_PSP_OAUTH_URL', false),
+            'oauth_bearer_token'          => env('LARAVEL_PIX_OAUTH2_BEARER_TOKEN'),
+            'verify_certificate'          => env('LARAVEL_PIX_PSP_VERIFY_CERTIFICATE'),
+            'client_certificate'          => env('LARAVEL_PIX_PSP_CLIENT_CERTIFICATE'),
+            'client_certificate_key'      => env('LARAVEL_PIX_PSP_CLIENT_CERTIFICATE_KEY'),
+            'client_certificate_password' => env('LARAVEL_PIX_PSP_CLIENT_CERTIFICATE_PASSWORD'),
+            'client_secret'               => env('LARAVEL_PIX_PSP_CLIENT_SECRET'),
+            'client_id'                   => env('LARAVEL_PIX_PSP_CLIENT_ID'),
+            'scope'                       => env('LARAVEL_PIX_PSP_SCOPE'),
+            'authentication_behavior'     => [
+                'auth'       => 'POST|BASIC_HEADER', // POST|GET|BASIC_HEADER
+                'grant_type' => 'POST', // POST|GET
+                'scope'      => 'POST', // POST|GET
+            ],
+            'resolve_endpoints_using' => Eduardokum\LaravelPix\Support\Endpoints::class,
+            'additional_params'       => [],
+            'additional_options'      => [],
         ],
     ],
 ];

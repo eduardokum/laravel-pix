@@ -19,7 +19,8 @@
         "orchestra/testbench": "^5.0|^6.0",
         "phpunit/phpunit": "^8.0|^9.0",
         "guzzlehttp/guzzle": "^7.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "friendsofphp/php-cs-fixer": "^3.46"
     },
     "license": "MIT",
     "autoload": {
@@ -40,6 +41,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit tests"
+        "test": "vendor/bin/phpunit tests",
+        "php-cs-fixer-check": "vendor/bin/php-cs-fixer fix --diff --verbose --dry-run",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix --verbose"
     }
 }

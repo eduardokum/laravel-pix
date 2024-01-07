@@ -3,8 +3,8 @@
 namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
-use Eduardokum\LaravelPix\Concerns\InteractsWithDynamicPayload;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
+use Eduardokum\LaravelPix\Concerns\InteractsWithDynamicPayload;
 use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 
 class DynamicPayload implements PixPayloadContract
@@ -12,10 +12,14 @@ class DynamicPayload implements PixPayloadContract
     use InteractsWithDynamicPayload;
 
     protected string $merchantName;
+
     protected string $merchantCity;
+
     protected string $transaction_id;
+
     private string $url;
-    private bool $unique;
+
+    private bool $reusable;
 
     public function transactionId(string $transaction_id): DynamicPayload
     {
@@ -49,14 +53,14 @@ class DynamicPayload implements PixPayloadContract
 
     public function canBeReused(): DynamicPayload
     {
-        $this->unique = true;
+        $this->reusable = true;
 
         return $this;
     }
 
     public function mustBeUnique(): DynamicPayload
     {
-        $this->unique = false;
+        $this->reusable = false;
 
         return $this;
     }
@@ -71,5 +75,10 @@ class DynamicPayload implements PixPayloadContract
     public function getPayload(): string
     {
         return $this->buildPayload();
+    }
+
+    public function __toString() : string
+    {
+        return $this->getPayload();
     }
 }

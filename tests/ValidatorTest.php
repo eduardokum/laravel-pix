@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Tests;
 
-use Eduardokum\LaravelPix\Validator;
+use Eduardokum\LaravelPix\Support\Validator;
 
 class ValidatorTest extends TestCase
 {

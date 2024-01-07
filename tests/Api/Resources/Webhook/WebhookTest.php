@@ -60,22 +60,6 @@ class WebhookTest extends TestCase
         $this->assertTrue($webhook->successful());
     }
 
-    public function test_it_can_get_webhooks_by_pix_keys()
-    {
-        Http::fake([
-            'pix.example.com/v2/*' => Http::response($response = [
-                'webhookUrl' => 'https://pix.example.com/api/webhook/',
-                'chave'      => $this->randomKey,
-                'criacao'    => '2020-11-11T10:15:00.358Z',
-            ], 200),
-        ]);
-
-        $webhook = Pix::webhook()->getByPixKey($this->randomKey);
-
-        $this->assertEquals($response, $webhook->json());
-        $this->assertTrue($webhook->successful());
-    }
-
     public function test_it_can_get_all_webhooks()
     {
         Http::fake([

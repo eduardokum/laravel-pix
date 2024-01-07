@@ -2,15 +2,15 @@
 
 namespace Eduardokum\LaravelPix\Api\Resources\Webhook;
 
-use Illuminate\Http\Client\Response;
+use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
+use Illuminate\Http\Client\Response;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
-use Eduardokum\LaravelPix\Api\Contracts\ConsumesWebhookEndpoints;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
 use Eduardokum\LaravelPix\Events\Webhooks\WebhookCreatedEvent;
 use Eduardokum\LaravelPix\Events\Webhooks\WebhookDeletedEvent;
-use Eduardokum\LaravelPix\Support\Endpoints;
-use RuntimeException;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesWebhookEndpoints;
 
 class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 {
@@ -18,7 +18,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function withFilters($filters): Webhook
     {
-        if (!is_array($filters) && !$filters instanceof ApplyApiFilters) {
+        if (! is_array($filters) && ! $filters instanceof ApplyApiFilters) {
             throw new RuntimeException("Filters should be an instance of 'FilterApiRequests' or an array.");
         }
 
@@ -31,7 +31,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function create(string $pixKey, string $callbackUrl): Response
     {
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::CREATE_WEBHOOK).$pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_WEBHOOK) . $pixKey);
 
         $webhook = $this->request()->put($endpoint, ['webhookUrl' => $callbackUrl]);
 
@@ -42,14 +42,14 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function getByPixKey(string $pixKey): Response
     {
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::GET_WEBHOOK).$pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOK) . $pixKey);
 
         return $this->request()->get($endpoint);
     }
 
     public function delete(string $pixKey): Response
     {
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::DELETE_WEBHOOK).$pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::DELETE_WEBHOOK) . $pixKey);
 
         $webhook = $this->request()->delete($endpoint);
 
@@ -60,7 +60,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function all(): Response
     {
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::GET_WEBHOOKS));
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOKS));
 
         return $this->request()->get($endpoint, $this->filters);
     }

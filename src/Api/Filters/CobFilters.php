@@ -17,12 +17,19 @@ class CobFilters implements ApplyApiFilters
     const PAGINATION_ITEMS_PER_PAGE = 'paginacao.itensPorPagina';
 
     private string $start;
+
     private string $end;
+
     private string $cpf;
+
     private string $cnpj;
+
     private string $locationPresent;
+
     private string $status;
+
     private int $itemsPerPage;
+
     private int $currentPage;
 
     public function startingAt(string $start): CobFilters
@@ -104,27 +111,27 @@ class CobFilters implements ApplyApiFilters
             self::END   => $this->end,
         ];
 
-        if (!empty($this->locationPresent)) {
+        if (! empty($this->locationPresent)) {
             $filters[self::LOCATION_PRESENT] = $this->locationPresent;
         }
 
-        if (!empty($this->cpf)) {
+        if (! empty($this->cpf)) {
             $filters[self::CPF] = $this->cpf;
         }
 
-        if (!empty($this->cnpj)) {
+        if (! empty($this->cnpj)) {
             $filters[self::CNPJ] = $this->cnpj;
         }
 
-        if (!empty($this->status)) {
+        if (! empty($this->status)) {
             $filters[self::STATUS] = $this->status;
         }
 
-        if (!empty($this->itemsPerPage)) {
+        if (! empty($this->itemsPerPage)) {
             $filters[self::PAGINATION_ITEMS_PER_PAGE] = $this->itemsPerPage;
         }
 
-        if (!empty($this->currentPage)) {
+        if (! empty($this->currentPage)) {
             $filters[self::PAGINATION_CURRENT_PAGE] = $this->currentPage;
         }
 

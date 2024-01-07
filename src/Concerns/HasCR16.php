@@ -9,7 +9,7 @@ trait HasCR16
 {
     public function getCRC16($payload): string
     {
-        $payload .= Pix::CRC16.Pix::CRC16_LENGTH;
+        $payload .= Pix::CRC16 . Pix::CRC16_LENGTH;
 
         $polynomial = 0x1021;
         $result = 0xFFFF;
@@ -26,6 +26,6 @@ trait HasCR16
             }
         }
 
-        return Pix::CRC16.Pix::CRC16_LENGTH.Str::upper(dechex($result));
+        return Pix::CRC16 . Pix::CRC16_LENGTH . Str::upper(dechex($result));
     }
 }

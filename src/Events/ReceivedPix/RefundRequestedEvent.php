@@ -5,7 +5,9 @@ namespace Eduardokum\LaravelPix\Events\ReceivedPix;
 class RefundRequestedEvent
 {
     public array $refund;
+
     public string $e2eid;
+
     public string $refundId;
 
     public function __construct(array $refund, string $e2eid, string $refundId)

@@ -3,18 +3,24 @@
 namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
-use Eduardokum\LaravelPix\Concerns\InteractsWithPayload;
+use Eduardokum\LaravelPix\Support\Parser;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
+use Eduardokum\LaravelPix\Concerns\InteractsWithPayload;
 
 class Payload implements PixPayloadContract
 {
     use InteractsWithPayload;
 
     protected string $pixKey;
+
     protected ?string $description;
+
     protected string $merchantName;
+
     protected string $merchantCity;
+
     protected string $transaction_id;
+
     protected string $amount;
 
     /**
@@ -86,5 +92,10 @@ class Payload implements PixPayloadContract
     public function getPayload(): string
     {
         return $this->buildPayload();
+    }
+
+    public function __toString() : string
+    {
+        return $this->getPayload();
     }
 }

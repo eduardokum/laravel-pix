@@ -1,9 +1,10 @@
 <?php
 
-namespace Eduardokum\LaravelPix;
+namespace Eduardokum\LaravelPix\Support;
 
-use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
+use Eduardokum\LaravelPix\Pix;
 use Eduardokum\LaravelPix\Exceptions\ParserException;
+use Eduardokum\LaravelPix\Exceptions\InvalidPixKeyException;
 
 class Parser
 {
@@ -56,7 +57,7 @@ class Parser
         $phone = str_replace('+55', '', $phone);
         $phone = preg_replace('/[^\d]+/', '', $phone);
 
-        return config('laravel-pix.country_phone_code', '+55').$phone;
+        return config('laravel-pix.country_phone_code', '+55') . $phone;
     }
 
     public static function parseTransactionId(string $transaction_id): string

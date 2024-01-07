@@ -15,10 +15,15 @@ class PayloadLocationFilters implements ApplyApiFilters
     const PAGINATION_ITEMS_PER_PAGE = 'paginacao.itensPorPagina';
 
     private string $start;
+
     private string $end;
+
     private string $transactionIdPresent;
+
     private string $cobType;
+
     private string $currentPage;
+
     private string $itemsPerPage;
 
     public function startingAt(string $start): PayloadLocationFilters
@@ -93,19 +98,19 @@ class PayloadLocationFilters implements ApplyApiFilters
             self::END   => $this->end,
         ];
 
-        if (!empty($this->transactionIdPresent)) {
+        if (! empty($this->transactionIdPresent)) {
             $filters[self::TXID_PRESENT] = $this->transactionIdPresent;
         }
 
-        if (!empty($this->cobType)) {
+        if (! empty($this->cobType)) {
             $filters[self::COB_TYPE] = $this->cobType;
         }
 
-        if (!empty($this->currentPage)) {
+        if (! empty($this->currentPage)) {
             $filters[self::PAGINATION_CURRENT_PAGE] = $this->currentPage;
         }
 
-        if (!empty($this->itemsPerPage)) {
+        if (! empty($this->itemsPerPage)) {
             $filters[self::PAGINATION_ITEMS_PER_PAGE] = $this->itemsPerPage;
         }
 

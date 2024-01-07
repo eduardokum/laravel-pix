@@ -2,15 +2,15 @@
 
 namespace Eduardokum\LaravelPix\Api\Resources\ReceivedPix;
 
-use Illuminate\Http\Client\Response;
+use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
+use Illuminate\Http\Client\Response;
+use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
-use Eduardokum\LaravelPix\Api\Contracts\ConsumesReceivedPixEndpoints;
+use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
 use Eduardokum\LaravelPix\Events\ReceivedPix\RefundRequestedEvent;
-use Eduardokum\LaravelPix\Exceptions\ValidationException;
-use Eduardokum\LaravelPix\Support\Endpoints;
-use RuntimeException;
+use Eduardokum\LaravelPix\Api\Contracts\ConsumesReceivedPixEndpoints;
 
 class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixEndpoints
 {
@@ -18,7 +18,7 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
 
     public function withFilters($filters): ReceivedPix
     {
-        if (!is_array($filters) && !$filters instanceof ApplyApiFilters) {
+        if (! is_array($filters) && ! $filters instanceof ApplyApiFilters) {
             throw new RuntimeException("Filters should be an instance of 'FilterApiRequests' or an array.");
         }
 
@@ -31,7 +31,7 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
 
     public function getBye2eid(string $e2eid): Response
     {
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::RECEIVED_PIX).$e2eid);
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::RECEIVED_PIX) . $e2eid);
 
         return $this->request()->get($endpoint);
     }
@@ -39,11 +39,11 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
     public function refund(string $e2eid, string $refundId): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->baseUrl
-            .$this->resolveEndpoint(Endpoints::RECEIVED_PIX)
-            .$e2eid
-            .$this->resolveEndpoint(Endpoints::RECEIVED_PIX_REFUND)
-            .$refundId
+            $this->getPsp()->getCurrentConfig('base_url')
+            . $this->resolveEndpoint(Endpoints::RECEIVED_PIX)
+            . $e2eid
+            . $this->resolveEndpoint(Endpoints::RECEIVED_PIX_REFUND)
+            . $refundId
         );
 
         $refund = $this->request()->put($endpoint);
@@ -56,11 +56,11 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
     public function consultRefund(string $e2eid, string $refundId): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->baseUrl
-            .$this->resolveEndpoint(Endpoints::RECEIVED_PIX)
-            .$e2eid
-            .$this->resolveEndpoint(Endpoints::RECEIVED_PIX_REFUND)
-            .$refundId
+            $this->getPsp()->getCurrentConfig('base_url')
+            . $this->resolveEndpoint(Endpoints::RECEIVED_PIX)
+            . $e2eid
+            . $this->resolveEndpoint(Endpoints::RECEIVED_PIX_REFUND)
+            . $refundId
         );
 
         return $this->request()->get($endpoint);
@@ -76,7 +76,7 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
             ValidationException::filtersAreRequired()
         );
 
-        $endpoint = $this->getEndpoint($this->baseUrl.$this->resolveEndpoint(Endpoints::RECEIVED_PIX));
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::RECEIVED_PIX));
 
         return $this->request()->get($endpoint, $this->filters);
     }

@@ -5,12 +5,20 @@ namespace Eduardokum\LaravelPix;
 use Eduardokum\LaravelPix\Api\Api;
 use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
 use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
-use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
-use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
-use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
 use Eduardokum\LaravelPix\Api\Resources\Webhook\Webhook;
-use Eduardokum\LaravelPix\Contracts\GeneratesQrCode;
+use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
+use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
+use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
 
+/**
+ * @method  Api api();
+ * @method  Cob cob();
+ * @method  Cobv cobv();
+ * @method  LoteCobv loteCobv();
+ * @method  Webhook webhook();
+ * @method  PayloadLocation payloadLocation();
+ * @method  ReceivedPix receivedPix();
+ */
 class Pix
 {
     const PAYLOAD_FORMAT_INDICATOR = '00';
@@ -30,19 +38,19 @@ class Pix
     const ADDITIONAL_DATA_FIELD_TEMPLATE_TXID = '05';
     const CRC16 = '63';
     const CRC16_LENGTH = '04';
-
     const MAX_DESCRIPTION_LENGTH = 40;
     const MAX_MERCHANT_NAME_LENGTH = 25;
     const MAX_MERCHANT_CITY_LENGTH = 15;
     const MAX_TRANSACTION_ID_LENGTH = 25;
     const MAX_AMOUNT_LENGTH = 13;
     const MIN_TRANSACTION_ID_LENGTH = 26;
-
     const RANDOM_KEY_TYPE = 'random';
     const CPF_KEY_TYPE = 'cpf';
     const CNPJ_KEY_TYPE = 'cnpj';
     const PHONE_NUMBER_KEY_TYPE = 'phone';
     const EMAIL_KEY_TYPE = 'email';
+
+    private static $pspConfigs;
 
     const KEY_TYPES = [
         Pix::RANDOM_KEY_TYPE,
@@ -52,14 +60,17 @@ class Pix
         Pix::EMAIL_KEY_TYPE,
     ];
 
-    public static function createQrCode(Payload $payload)
+    public static function usingOnTheFlyPsp($pspConfigs)
     {
-        return app(GeneratesQrCode::class)->withPayload($payload);
+        $s = (new static());
+        $s::$pspConfigs = $pspConfigs;
+
+        return $s;
     }
 
-    public static function createDynamicQrCode(DynamicPayload $payload)
+    public static function createQrCode(Payload $payload)
     {
-        return app(GeneratesQrCode::class)->withDynamicPayload($payload);
+        return (new QrCodeGenerator())->withPayload($payload);
     }
 
     /**
@@ -69,7 +80,12 @@ class Pix
      */
     public static function api(): Api
     {
-        return new Api();
+        $api = new Api();
+        if (self::$pspConfigs) {
+            $api->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $api;
     }
 
     /**
@@ -79,7 +95,12 @@ class Pix
      */
     public static function cob(): Cob
     {
-        return new Cob();
+        $cob = new Cob();
+        if (self::$pspConfigs) {
+            $cob->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $cob;
     }
 
     /**
@@ -89,7 +110,12 @@ class Pix
      */
     public static function cobv(): Cobv
     {
-        return new Cobv();
+        $cobv = new Cobv();
+        if (self::$pspConfigs) {
+            $cobv->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $cobv;
     }
 
     /**
@@ -99,7 +125,12 @@ class Pix
      */
     public static function loteCobv(): LoteCobv
     {
-        return new LoteCobv();
+        $loteCobv = new LoteCobv();
+        if (self::$pspConfigs) {
+            $loteCobv->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $loteCobv;
     }
 
     /**
@@ -109,7 +140,12 @@ class Pix
      */
     public static function webhook(): Webhook
     {
-        return new Webhook();
+        $webhook = new Webhook();
+        if (self::$pspConfigs) {
+            $webhook->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $webhook;
     }
 
     /**
@@ -119,7 +155,12 @@ class Pix
      */
     public static function payloadLocation(): PayloadLocation
     {
-        return new PayloadLocation();
+        $payloadLocation = new PayloadLocation();
+        if (self::$pspConfigs) {
+            $payloadLocation->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $payloadLocation;
     }
 
     /**
@@ -129,6 +170,11 @@ class Pix
      */
     public static function receivedPix(): ReceivedPix
     {
-        return new ReceivedPix();
+        $receivedPix = new ReceivedPix();
+        if (self::$pspConfigs) {
+            $receivedPix->usingOnTheFlyPsp(self::$pspConfigs);
+        }
+
+        return $receivedPix;
     }
 }
