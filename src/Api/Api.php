@@ -24,7 +24,7 @@ class Api implements ConsumesPixApi
         $this->psp = new Psp();
     }
 
-    public function oauthToken(?string $oauthToken): Api
+    public function oauthToken(?string $oauthToken = null): Api
     {
         if (! $oauthToken) {
             $oauthToken = Arr::get($this->getOauth2Token()->json(), 'access_token');
