@@ -35,7 +35,9 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
         $webhook = $this->request()->put($endpoint, ['webhookUrl' => $callbackUrl]);
 
-        event(new WebhookCreatedEvent($webhook->json()));
+        if ($webhook->successful()) {
+            event(new WebhookCreatedEvent($webhook->json()));
+        }
 
         return $webhook;
     }

@@ -3,13 +3,14 @@
 namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
+use Eduardokum\LaravelPix\Concerns\DecodePayload;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
 use Eduardokum\LaravelPix\Concerns\InteractsWithDynamicPayload;
 use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 
 class DynamicPayload implements PixPayloadContract
 {
-    use InteractsWithDynamicPayload;
+    use InteractsWithDynamicPayload, DecodePayload;
 
     protected string $merchantName;
 
@@ -77,8 +78,8 @@ class DynamicPayload implements PixPayloadContract
         return $this->buildPayload();
     }
 
-    public function __toString() : string
+    public static function decode($payload): array
     {
-        return $this->getPayload();
+        return self::decodeRecursivePayload($payload);
     }
 }

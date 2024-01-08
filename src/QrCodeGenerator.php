@@ -14,7 +14,7 @@ class QrCodeGenerator implements GeneratesQrCode
 
     public function __construct()
     {
-        $this->qrCode = QrCode::size(config('laravel-pix.qr_code_size', 100))->margin(1)->format('png')->errorCorrection(ErrorCorrectionLevel::M());
+        $this->qrCode = QrCode::size(config('laravel-pix.qr_code_size', 100))->margin(1)->format('png')->errorCorrection(ErrorCorrectionLevel::Q());
 
         return $this;
     }
@@ -26,6 +26,11 @@ class QrCodeGenerator implements GeneratesQrCode
 
     public function withPayload(PixPayloadContract $payload): string
     {
-        return 'data:image/png;base64,' . base64_encode($this->getQrCodeObject()->generate($payload->getPayload()));
+        return $this->withStringPayload($payload->getPayload());
+    }
+
+    public function withStringPayload(string $payload): string
+    {
+        return 'data:image/png;base64,' . base64_encode($this->getQrCodeObject()->generate($payload));
     }
 }

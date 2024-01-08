@@ -3,8 +3,10 @@
 namespace Eduardokum\LaravelPix;
 
 use Eduardokum\LaravelPix\Api\Api;
+use Illuminate\Support\Facades\Http;
 use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
 use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
+use Eduardokum\LaravelPix\Exceptions\LocationException;
 use Eduardokum\LaravelPix\Api\Resources\Webhook\Webhook;
 use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
 use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
@@ -176,5 +178,39 @@ class Pix
         }
 
         return $receivedPix;
+    }
+
+    #[ArrayShape([
+        'fetch'   => 'string',
+        'header'  => 'array',
+        'payload' => 'array',
+    ])]
+    public static function fetchLocation($location): array
+    {
+        $response = Http::retry(3, 200)->get($location);
+
+        throw_if(! $response->successful(), LocationException::notFound($location));
+
+        $fetch = $response->body();
+        $data = explode('.', $fetch);
+
+        throw_if(count($data) !== 3, LocationException::cannotBeDecoded($location));
+
+        return [
+            'fetch'   => $fetch,
+            'header'  => json_decode(self::safeBase64Decode($data[0]), true),
+            'payload' => json_decode(self::safeBase64Decode($data[1]), true),
+        ];
+    }
+
+    private static function safeBase64Decode($base64)
+    {
+        $remainder = strlen($base64) % 4;
+        if ($remainder) {
+            $padlen = 4 - $remainder;
+            $base64 .= str_repeat('=', $padlen);
+        }
+
+        return base64_decode(strtr($base64, '-_', '+/'));
     }
 }

@@ -4,12 +4,13 @@ namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Str;
 use Eduardokum\LaravelPix\Support\Parser;
+use Eduardokum\LaravelPix\Concerns\DecodePayload;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
 use Eduardokum\LaravelPix\Concerns\InteractsWithPayload;
 
 class Payload implements PixPayloadContract
 {
-    use InteractsWithPayload;
+    use InteractsWithPayload, DecodePayload;
 
     protected string $pixKey;
 
@@ -85,8 +86,6 @@ class Payload implements PixPayloadContract
     }
 
     /**
-     * @throws Exceptions\PixException
-     *
      * @return string
      */
     public function getPayload(): string
@@ -94,8 +93,8 @@ class Payload implements PixPayloadContract
         return $this->buildPayload();
     }
 
-    public function __toString() : string
+    public static function decode($payload): array
     {
-        return $this->getPayload();
+        return self::decodeRecursivePayload($payload);
     }
 }

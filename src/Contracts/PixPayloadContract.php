@@ -6,5 +6,5 @@ interface PixPayloadContract
 {
     public function getPayload(): string;
 
-    public function __toString() : string;
+    public static function decode($payload): array;
 }

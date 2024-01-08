@@ -40,11 +40,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
 
     public function getById(string $id): Response
     {
-        $endpoint = $this->getEndpoint(
-            $this->getPsp()->getCurrentConfig('base_url')
-            . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION)
-            . $id
-        );
+        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION) . $id);
 
         return $this->request()->get($endpoint, $this->filters);
     }
