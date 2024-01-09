@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Api\Contracts;
 
-interface ConsumesCobEndpoints extends ConsumesPixApi
+interface ConsumesCobEndpoints
 {
     public function create(string $transactionId, array $request);
 

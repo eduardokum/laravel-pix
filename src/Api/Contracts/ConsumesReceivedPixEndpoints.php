@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Api\Contracts;
 
-interface ConsumesReceivedPixEndpoints extends ConsumesPixApi
+interface ConsumesReceivedPixEndpoints
 {
     public function getBye2eid(string $e2eid);
 

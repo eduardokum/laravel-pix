@@ -2,7 +2,6 @@
 
 namespace Eduardokum\LaravelPix;
 
-use Eduardokum\LaravelPix\Api\Api;
 use Illuminate\Support\Facades\Http;
 use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
 use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
@@ -12,15 +11,6 @@ use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
 use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
 use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
 
-/**
- * @method  Api api();
- * @method  Cob cob();
- * @method  Cobv cobv();
- * @method  LoteCobv loteCobv();
- * @method  Webhook webhook();
- * @method  PayloadLocation payloadLocation();
- * @method  ReceivedPix receivedPix();
- */
 class Pix
 {
     const PAYLOAD_FORMAT_INDICATOR = '00';
@@ -51,9 +41,6 @@ class Pix
     const CNPJ_KEY_TYPE = 'cnpj';
     const PHONE_NUMBER_KEY_TYPE = 'phone';
     const EMAIL_KEY_TYPE = 'email';
-
-    private static $pspConfigs;
-
     const KEY_TYPES = [
         Pix::RANDOM_KEY_TYPE,
         Pix::CPF_KEY_TYPE,
@@ -62,32 +49,32 @@ class Pix
         Pix::EMAIL_KEY_TYPE,
     ];
 
-    public static function usingOnTheFlyPsp($pspConfigs)
-    {
-        $s = (new static());
-        $s::$pspConfigs = $pspConfigs;
+    private $psp;
 
-        return $s;
-    }
+    private ?Cob $cob = null;
 
-    public static function createQrCode(Payload $payload)
+    private ?Cobv $cobv = null;
+
+    private ?LoteCobv $loteCobv = null;
+
+    private ?Webhook $webhook = null;
+
+    private ?PayloadLocation $payloadLocation = null;
+
+    private ?ReceivedPix $receivedPix = null;
+
+    public function __construct(array $pspConfigs = null)
     {
-        return (new QrCodeGenerator())->withPayload($payload);
+        $this->psp = new Psp($pspConfigs);
     }
 
     /**
-     * This method allows you to use only OAuth endpoints.
-     *
-     * @return Api
+     * @param array|null $pspConfigs
+     * @return static
      */
-    public static function api(): Api
+    public static function make(array $pspConfigs = null)
     {
-        $api = new Api();
-        if (self::$pspConfigs) {
-            $api->usingOnTheFlyPsp(self::$pspConfigs);
-        }
-
-        return $api;
+        return new static($pspConfigs);
     }
 
     /**
@@ -95,14 +82,13 @@ class Pix
      *
      * @return Cob
      */
-    public static function cob(): Cob
+    public function cob(): Cob
     {
-        $cob = new Cob();
-        if (self::$pspConfigs) {
-            $cob->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->cob) {
+            return $this->cob;
         }
 
-        return $cob;
+        return $this->cob = new Cob($this->getPsp());
     }
 
     /**
@@ -110,14 +96,13 @@ class Pix
      *
      * @return Cobv
      */
-    public static function cobv(): Cobv
+    public function cobv(): Cobv
     {
-        $cobv = new Cobv();
-        if (self::$pspConfigs) {
-            $cobv->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->cobv) {
+            return $this->cobv;
         }
 
-        return $cobv;
+        return $this->cobv = new Cobv($this->getPsp());
     }
 
     /**
@@ -125,14 +110,13 @@ class Pix
      *
      * @return LoteCobv
      */
-    public static function loteCobv(): LoteCobv
+    public function loteCobv(): LoteCobv
     {
-        $loteCobv = new LoteCobv();
-        if (self::$pspConfigs) {
-            $loteCobv->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->loteCobv) {
+            return $this->loteCobv;
         }
 
-        return $loteCobv;
+        return $this->loteCobv = new LoteCobv($this->getPsp());
     }
 
     /**
@@ -140,14 +124,13 @@ class Pix
      *
      * @return Webhook
      */
-    public static function webhook(): Webhook
+    public function webhook(): Webhook
     {
-        $webhook = new Webhook();
-        if (self::$pspConfigs) {
-            $webhook->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->webhook) {
+            return $this->webhook;
         }
 
-        return $webhook;
+        return $this->webhook = new Webhook($this->getPsp());
     }
 
     /**
@@ -155,14 +138,13 @@ class Pix
      *
      * @return PayloadLocation
      */
-    public static function payloadLocation(): PayloadLocation
+    public function payloadLocation(): PayloadLocation
     {
-        $payloadLocation = new PayloadLocation();
-        if (self::$pspConfigs) {
-            $payloadLocation->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->payloadLocation) {
+            return $this->payloadLocation;
         }
 
-        return $payloadLocation;
+        return $this->payloadLocation = new PayloadLocation($this->getPsp());
     }
 
     /**
@@ -170,23 +152,51 @@ class Pix
      *
      * @return ReceivedPix
      */
-    public static function receivedPix(): ReceivedPix
+    public function receivedPix(): ReceivedPix
     {
-        $receivedPix = new ReceivedPix();
-        if (self::$pspConfigs) {
-            $receivedPix->usingOnTheFlyPsp(self::$pspConfigs);
+        if ($this->receivedPix) {
+            return $this->receivedPix;
         }
 
-        return $receivedPix;
+        return $this->receivedPix = new ReceivedPix($this->getPsp());
     }
 
-    #[ArrayShape([
-        'fetch'   => 'string',
-        'header'  => 'array',
-        'payload' => 'array',
-    ])]
+    public function getOauth2Token(string $scope = null): Pix
+    {
+        $this->getPsp()->getOauth2Token($scope);
+
+        return $this;
+    }
+
+    public function setOnTheFly(array $pspConfigs): Pix
+    {
+        $this->getPsp()->onTheFly($pspConfigs);
+
+        return $this->propagateChanges();
+    }
+
+    public function usingPsp(string $psp): Pix
+    {
+        $this->getPsp()->currentPsp($pspConfigs);
+
+        return $this->propagateChanges();
+    }
+
+    public function usingDefaultPsp(): Pix
+    {
+        $this->getPsp()->currentPsp('default');
+
+        return $this->propagateChanges();
+    }
+
+    public static function createQrCode(Payload $payload)
+    {
+        return (new QrCodeGenerator())->withPayload($payload);
+    }
+
     public static function fetchLocation($location): array
     {
+        $location = 'https://' . preg_replace('/^https?:\/\//', '', $location);
         $response = Http::retry(3, 200)->get($location);
 
         throw_if(! $response->successful(), LocationException::notFound($location));
@@ -212,5 +222,22 @@ class Pix
         }
 
         return base64_decode(strtr($base64, '-_', '+/'));
+    }
+
+    private function getPsp(): Psp
+    {
+        return $this->psp;
+    }
+
+    private function propagateChanges(): Pix
+    {
+        optional($this->cob)->setPsp($this->getPsp());
+        optional($this->cobv)->setPsp($this->getPsp());
+        optional($this->loteCobv)->setPsp($this->getPsp());
+        optional($this->webhook)->setPsp($this->getPsp());
+        optional($this->payloadLocation)->setPsp($this->getPsp());
+        optional($this->receivedPix)->setPsp($this->getPsp());
+
+        return $this;
     }
 }

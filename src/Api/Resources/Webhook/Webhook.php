@@ -31,7 +31,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function create(string $pixKey, string $callbackUrl): Response
     {
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_WEBHOOK) . $pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_WEBHOOK) . $pixKey);
 
         $webhook = $this->request()->put($endpoint, ['webhookUrl' => $callbackUrl]);
 
@@ -44,14 +44,14 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function getByPixKey(string $pixKey): Response
     {
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOK) . $pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOK) . $pixKey);
 
         return $this->request()->get($endpoint);
     }
 
     public function delete(string $pixKey): Response
     {
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::DELETE_WEBHOOK) . $pixKey);
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::DELETE_WEBHOOK) . $pixKey);
 
         $webhook = $this->request()->delete($endpoint);
 
@@ -62,7 +62,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
     public function all(): Response
     {
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOKS));
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_WEBHOOKS));
 
         return $this->request()->get($endpoint, $this->filters);
     }

@@ -3,112 +3,131 @@
 namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Arr;
+use Eduardokum\LaravelPix\Api\Auth;
+use Illuminate\Support\Facades\Cache;
+use Eduardokum\LaravelPix\Exceptions\RequestException;
 use Eduardokum\LaravelPix\Contracts\CanResolveEndpoints;
 use Eduardokum\LaravelPix\Exceptions\Psp\InvalidPspException;
 
 class Psp
 {
-    public static string $defaultPsp = 'default';
+    private ?array $accessToken = null;
 
     public ?string $currentPsp = null;
 
-    private ?array $onTheFlyPsp = null;
+    private ?array $onTheFly = null;
 
     private array $cachedConfigs = [];
 
-    public static function getConfig(): Psp
+    public function __construct(array $onTheFly = null)
     {
-        return new static();
+        $this->onTheFly($onTheFly);
     }
 
-    public static function defaultPsp($psp)
+    public function onTheFly(array $onTheFly = null): Psp
     {
-        self::$defaultPsp = $psp;
-    }
-
-    public function onTheFlyPsp(array $configs = null): Psp
-    {
+        if (! $onTheFly) {
+            return $this;
+        }
         $this->currentPsp = 'on-the-fly';
-        unset($this->cachedConfigs[$this->currentPsp]);
-        $this->onTheFlyPsp = $configs;
+        $default = config('laravel-pix.psp.default');
+        $onTheFly = Arr::only($onTheFly, array_keys(config('laravel-pix.psp.default')));
+        $onTheFly['authentication_behavior'] =
+            Arr::only(
+                Arr::get($onTheFly, 'authentication_behavior') + config('laravel-pix.psp.default.authentication_behavior'),
+                array_keys(config('laravel-pix.psp.default.authentication_behavior'))
+            );
+        $this->onTheFly = $this->cachedConfigs['on-the-fly'] = $onTheFly + $default;
 
         return $this;
     }
 
     public function currentPsp(string $psp = null): Psp
     {
-        $psp = $psp ?? self::$defaultPsp;
+        $psp = $psp ?? 'default';
 
         $this->currentPsp = $psp;
 
         return $this;
     }
 
-    public function getCurrentPsp(): ?string
+    public function getConfig(string $config = null, $default = null)
     {
-        return $this->currentPsp ?? self::$defaultPsp;
+        return Arr::get($this->getPspConfig($this->currentPsp), $config, $default);
     }
 
-    public static function getDefaultPsp(): string
+    public function getEndpointsResolver(): CanResolveEndpoints
     {
-        return self::$defaultPsp;
+        return app($this->getConfig('resolve_endpoints_using'));
     }
 
-    public static function availablePsps(): array
+    public function getCertificate()
     {
-        return array_keys(config('laravel-pix.psp'));
+        if (! $this->getConfig('client_certificate')) {
+            return null;
+        }
+
+        return $this->getConfig('client_certificate_password') ?? false
+            ? [$this->getConfig('client_certificate'), $this->getConfig('client_certificate_password')]
+            : $this->getConfig('client_certificate');
     }
 
-    public function getCurrentConfig(string $config = null)
+    public function shouldVerifySslCertificate(): bool
     {
-        return Arr::get($this->getPspConfig($this->getCurrentPsp()), $config);
+        return file_exists($this->getConfig('verify_certificate'));
     }
 
-    public function getPspConfig(string $psp)
+    public function getToken(): ?string
+    {
+        return Arr::get($this->accessToken, 'access_token');
+    }
+
+    public function getOauth2Token(string $scope = null): string
+    {
+        $keyCache = config('laravel-pix.cache') ? 'laravel-pix-' . md5($this->getConfig('client_id') . $this->getConfig('client_secret')) : null;
+
+        if ($keyCache && ($cache = Cache::get($keyCache))) {
+            $this->accessToken = decrypt($cache);
+
+            return $this->accessToken['access_token'];
+        }
+
+        $response = (new Auth($this))->getToken($scope);
+        if (! $response->successful()) {
+            RequestException::tokenNotGranted($response->body());
+        }
+
+        $this->accessToken = [
+            'access_token' => $response->json('access_token'),
+            'expires_in'   => $response->json('expires_in', 3600),
+        ];
+
+        if ($keyCache) {
+            Cache::put($keyCache, encrypt($this->accessToken), carbon()->addSeconds($this->accessToken['expires_in']));
+        }
+
+        return $this->accessToken['access_token'];
+    }
+
+    private function getPspConfig(string $psp)
     {
         if (isset($this->cachedConfigs[$psp])) {
             return $this->cachedConfigs[$psp];
         }
         if ($psp == 'on-the-fly') {
             $default = config('laravel-pix.psp.default');
-            $onTheFly = Arr::only($this->onTheFlyPsp, array_keys(config('laravel-pix.psp.default')));
+            $onTheFly = Arr::only($this->onTheFly, array_keys(config('laravel-pix.psp.default')));
             $onTheFly['authentication_behavior'] =
                 Arr::only(
-                    Arr::get($this->onTheFlyPsp, 'authentication_behavior') + config('laravel-pix.psp.default.authentication_behavior'),
+                    Arr::get($this->onTheFly, 'authentication_behavior') + config('laravel-pix.psp.default.authentication_behavior'),
                     array_keys(config('laravel-pix.psp.default.authentication_behavior'))
                 );
 
             return $this->cachedConfigs[$psp] = $onTheFly + $default;
         }
 
-        throw_if(! $this->validatePsp($psp), InvalidPspException::pspNotFound($psp));
+        throw_if(! in_array($psp, array_keys(config('laravel-pix.psp'))), InvalidPspException::pspNotFound($psp));
 
         return $this->cachedConfigs[$psp] = config("laravel-pix.psp.{$psp}");
-    }
-
-    public function getEndpointsResolver(): CanResolveEndpoints
-    {
-        return app($this->getCurrentConfig('resolve_endpoints_using'));
-    }
-
-    public function getCertificate()
-    {
-        if (! $this->getCurrentConfig('client_certificate')) {
-            return null;
-        }
-
-        return $this->getCurrentConfig('client_certificate_password') ?? false
-            ? [$this->getCurrentConfig('client_certificate'), $this->getCurrentConfig('client_certificate_password')]
-            : $this->getCurrentConfig('client_certificate');
-    }
-
-    public function shouldVerifySslCertificate(): bool
-    {
-        return file_exists($this->getCurrentConfig('verify_certificate'));
-    }
-
-    private function validatePsp(string $psp): bool
-    {
-        return in_array($psp, $this->availablePsps());
     }
 }

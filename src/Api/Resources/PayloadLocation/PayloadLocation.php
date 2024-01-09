@@ -31,7 +31,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
     public function create(string $loc): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->getPsp()->getCurrentConfig('base_url')
+            $this->getPsp()->getConfig('base_url')
             . $this->resolveEndpoint(Endpoints::CREATE_PAYLOAD_LOCATION)
         );
 
@@ -40,7 +40,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
 
     public function getById(string $id): Response
     {
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION) . $id);
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION) . $id);
 
         return $this->request()->get($endpoint, $this->filters);
     }
@@ -48,7 +48,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
     public function detachChargeFromLocation(string $id): Response
     {
         $endpoint = $this->getEndpoint(
-            $this->getPsp()->getCurrentConfig('base_url') .
+            $this->getPsp()->getConfig('base_url') .
             $this->resolveEndpoint(Endpoints::DETACH_CHARGE_FROM_LOCATION)
             . $id
             . $this->resolveEndpoint(Endpoints::PAYLOAD_LOCATION_TXID)
@@ -67,7 +67,7 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
             ValidationException::filtersAreRequired()
         );
 
-        $endpoint = $this->getEndpoint($this->getPsp()->getCurrentConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION));
+        $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::GET_PAYLOAD_LOCATION));
 
         return $this->request()->get($endpoint, $this->filters);
     }

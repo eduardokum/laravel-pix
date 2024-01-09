@@ -18,6 +18,11 @@ return [
      */
     'qr_code_size' => 200,
 
+    /**
+     * Faz cache do access_token
+     */
+    'cache' => env('LARAVEL_PIX_CACHE', true),
+
     /*
      * Informações do Prestador de serviço de pagamento (PSP) que você está utilizando.
      * Você pode utilizar vários psps com este pacote, bastando adicionar um novo array com configurações.
@@ -44,6 +49,7 @@ return [
             'resolve_endpoints_using' => Eduardokum\LaravelPix\Support\Endpoints::class,
             'additional_params'       => [],
             'additional_options'      => [],
+            'additional_headers'      => [],
         ],
     ],
 ];

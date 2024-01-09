@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Api\Contracts;
 
-interface ConsumesPayloadLocationEndpoints extends ConsumesPixApi
+interface ConsumesPayloadLocationEndpoints
 {
     public function create(string $loc);
 

@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Api\Contracts;
 
-interface ConsumesWebhookEndpoints extends ConsumesPixApi
+interface ConsumesWebhookEndpoints
 {
     public function create(string $pixKey, string $callbackUrl);
 

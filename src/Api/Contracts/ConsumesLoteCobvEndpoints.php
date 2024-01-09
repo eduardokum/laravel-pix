@@ -2,7 +2,7 @@
 
 namespace Eduardokum\LaravelPix\Api\Contracts;
 
-interface ConsumesLoteCobvEndpoints extends ConsumesPixApi
+interface ConsumesLoteCobvEndpoints
 {
     public function createBatch(string $batchId, array $request);
 
