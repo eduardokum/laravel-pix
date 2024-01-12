@@ -168,6 +168,11 @@ class Pix
         return $this;
     }
 
+    public function getToken(): ?string
+    {
+        return $this->getPsp()->getToken();
+    }
+
     public function setOnTheFly(array $pspConfigs): Pix
     {
         $this->getPsp()->onTheFly($pspConfigs);
