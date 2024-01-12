@@ -24,13 +24,12 @@ class QrCodeGenerator implements GeneratesQrCode
         return $this->qrCode;
     }
 
-    public function withPayload(PixPayloadContract $payload): string
+    public function withPayload($payload): string
     {
-        return $this->withStringPayload($payload->getPayload());
-    }
+        if ($payload instanceof PixPayloadContract) {
+            $payload = $payload->getPayload();
+        }
 
-    public function withStringPayload(string $payload): string
-    {
         return 'data:image/png;base64,' . base64_encode($this->getQrCodeObject()->generate($payload));
     }
 }

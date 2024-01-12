@@ -177,19 +177,17 @@ class Pix
 
     public function usingPsp(string $psp): Pix
     {
-        $this->getPsp()->currentPsp($pspConfigs);
+        $this->getPsp()->currentPsp($psp);
 
         return $this->propagateChanges();
     }
 
     public function usingDefaultPsp(): Pix
     {
-        $this->getPsp()->currentPsp('default');
-
-        return $this->propagateChanges();
+        return $this->usingPsp('default');
     }
 
-    public static function createQrCode(Payload $payload)
+    public static function createQrCode($payload)
     {
         return (new QrCodeGenerator())->withPayload($payload);
     }

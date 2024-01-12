@@ -2,10 +2,12 @@
 
 namespace Eduardokum\LaravelPix\Api;
 
+use Throwable;
 use Eduardokum\LaravelPix\Psp;
 use Illuminate\Support\Facades\Http;
 use Eduardokum\LaravelPix\Exceptions\RequestException;
 use Eduardokum\LaravelPix\Api\Contracts\AuthenticatesPSPs;
+use Illuminate\Http\Client\RequestException as RequestExceptionIlluminate;
 
 class Auth implements AuthenticatesPSPs
 {
@@ -35,20 +37,25 @@ class Auth implements AuthenticatesPSPs
             'verify'  => $this->getPsp()->shouldVerifySslCertificate() ? $this->getPsp()->getConfig('verify_certificate') : false,
         ]);
 
-        return $client->asForm()->post($this->getOauthEndpoint(), array_filter([
-            'client_id' => str_contains($this->getPsp()->getConfig('authentication_behavior.auth'), 'POST')
-                ? $this->getPsp()->getConfig('client_id')
-                : null,
-            'client_secret' => str_contains($this->getPsp()->getConfig('authentication_behavior.auth'), 'POST')
-                ? $this->getPsp()->getConfig('client_secret')
-                : null,
-            'grant_type' => str_contains($this->getPsp()->getConfig('authentication_behavior.grant_type'), 'POST')
-                ? 'client_credentials'
-                : null,
-            'scope' => str_contains($this->getPsp()->getConfig('authentication_behavior.scope'), 'POST')
-                ? $this->scope
-                : null,
-        ]));
+        return $client
+            ->asForm()
+            ->retry(3, 200, function (Throwable $exception) {
+                return $exception instanceof RequestExceptionIlluminate || $exception->response->status() !== 401;
+            }, throw: false)
+            ->post($this->getOauthEndpoint(), array_filter([
+                'client_id' => str_contains($this->getPsp()->getConfig('authentication_behavior.auth'), 'POST')
+                    ? $this->getPsp()->getConfig('client_id')
+                    : null,
+                'client_secret' => str_contains($this->getPsp()->getConfig('authentication_behavior.auth'), 'POST')
+                    ? $this->getPsp()->getConfig('client_secret')
+                    : null,
+                'grant_type' => str_contains($this->getPsp()->getConfig('authentication_behavior.grant_type'), 'POST')
+                    ? 'client_credentials'
+                    : null,
+                'scope' => str_contains($this->getPsp()->getConfig('authentication_behavior.scope'), 'POST')
+                    ? $this->scope
+                    : null,
+            ]));
     }
 
     public function getOauthEndpoint(): string

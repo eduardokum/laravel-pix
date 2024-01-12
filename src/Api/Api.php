@@ -63,11 +63,7 @@ abstract class Api
 
         $client->withToken($this->getPsp()->getToken());
         $client->retry(3, 200, function (Throwable $exception) {
-            if (! $exception instanceof RequestException || $exception->response->status() !== 401) {
-                return false;
-            }
-
-            return true;
+            return $exception instanceof RequestException || $exception->response->status() !== 401;
         }, throw: false);
 
         return $client;
