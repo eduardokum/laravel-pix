@@ -82,14 +82,18 @@ class Psp
         return Arr::get($this->accessToken, 'access_token');
     }
 
-    public function getOauth2Token(string $scope = null): string
+    public function getOauth2Token(string $scope = null): ?string
     {
         $keyCache = config('laravel-pix.cache') ? 'laravel-pix-' . md5($this->getConfig('client_id') . $this->getConfig('client_secret')) : null;
 
         if ($keyCache && ($cache = Cache::get($keyCache))) {
             $this->accessToken = decrypt($cache);
 
-            return $this->accessToken['access_token'];
+            if (! Arr::get($this->accessToken ?: [], 'access_token')) {
+                Cache::forget($keyCache);
+            } else {
+                return $this->accessToken['access_token'];
+            }
         }
 
         $response = (new Auth($this))->getToken($scope);
