@@ -1,6 +1,6 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\ReceivedPix;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
@@ -9,7 +9,7 @@ use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
-use Eduardokum\LaravelPix\Events\ReceivedPix\RefundRequestedEvent;
+use Eduardokum\LaravelPix\Events\ReceivedPix\RefundCreatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ConsumesReceivedPixEndpoints;
 
 class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixEndpoints
@@ -46,11 +46,13 @@ class ReceivedPix extends Api implements FilterApiRequests, ConsumesReceivedPixE
             . $refundId
         );
 
-        $refund = $this->request()->put($endpoint);
+        $response = $this->request()->put($endpoint);
 
-        event(new RefundRequestedEvent($refund->json(), $e2eid, $refundId));
+        if ($response->successful()) {
+            RefundCreatedEvent::dispatch($response->json(), $e2eid, $refundId);
+        }
 
-        return $refund;
+        return $response;
     }
 
     public function consultRefund(string $e2eid, string $refundId): Response

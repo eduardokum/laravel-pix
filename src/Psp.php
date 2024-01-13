@@ -19,6 +19,8 @@ class Psp
 
     private array $cachedConfigs = [];
 
+    private $withoutCache = false;
+
     public function __construct(array $onTheFly = null)
     {
         $this->onTheFly($onTheFly);
@@ -61,6 +63,13 @@ class Psp
         return app($this->getConfig('resolve_endpoints_using'));
     }
 
+    public function withoutCache(): Psp
+    {
+        $this->withoutCache = false;
+
+        return $this;
+    }
+
     public function getCertificate()
     {
         if (! $this->getConfig('client_certificate')) {
@@ -86,7 +95,7 @@ class Psp
     {
         $keyCache = config('laravel-pix.cache') ? 'laravel-pix-' . md5($this->getConfig('client_id') . $this->getConfig('client_secret')) : null;
 
-        if ($keyCache && ($cache = Cache::get($keyCache))) {
+        if ($keyCache && ! $this->withoutCache && ($cache = Cache::get($keyCache))) {
             $this->accessToken = decrypt($cache);
 
             if (! Arr::get($this->accessToken ?: [], 'access_token')) {
@@ -109,6 +118,7 @@ class Psp
         if ($keyCache) {
             Cache::put($keyCache, encrypt($this->accessToken), carbon()->addSeconds($this->accessToken['expires_in']));
         }
+        $this->withoutCache = false;
 
         return $this->accessToken['access_token'];
     }

@@ -3,13 +3,13 @@
 namespace Eduardokum\LaravelPix;
 
 use Illuminate\Support\Facades\Http;
-use Eduardokum\LaravelPix\Api\Resources\Cob\Cob;
-use Eduardokum\LaravelPix\Api\Resources\Cobv\Cobv;
+use Eduardokum\LaravelPix\Api\Resources\Cob;
+use Eduardokum\LaravelPix\Api\Resources\Cobv;
+use Eduardokum\LaravelPix\Api\Resources\Webhook;
+use Eduardokum\LaravelPix\Api\Resources\LoteCobv;
+use Eduardokum\LaravelPix\Api\Resources\ReceivedPix;
 use Eduardokum\LaravelPix\Exceptions\LocationException;
-use Eduardokum\LaravelPix\Api\Resources\Webhook\Webhook;
-use Eduardokum\LaravelPix\Api\Resources\LoteCobv\LoteCobv;
-use Eduardokum\LaravelPix\Api\Resources\ReceivedPix\ReceivedPix;
-use Eduardokum\LaravelPix\Api\Resources\PayloadLocation\PayloadLocation;
+use Eduardokum\LaravelPix\Api\Resources\PayloadLocation;
 
 class Pix
 {
@@ -190,6 +190,13 @@ class Pix
     public function usingDefaultPsp(): Pix
     {
         return $this->usingPsp('default');
+    }
+
+    public function withoutCache(): Pix
+    {
+        $this->getPsp()->withoutCache();
+
+        return $this;
     }
 
     public static function createQrCode($payload)

@@ -1,11 +1,13 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\Cob;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
 use Illuminate\Http\Client\Response;
 use Eduardokum\LaravelPix\Support\Endpoints;
+use Eduardokum\LaravelPix\Events\Cob\CobCreatedEvent;
+use Eduardokum\LaravelPix\Events\Cob\CobUpdatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
@@ -32,14 +34,24 @@ class Cob extends Api implements ConsumesCobEndpoints, FilterApiRequests
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_COB) . $transactionId);
 
-        return $this->request()->put($endpoint, $request);
+        $response = $this->request()->put($endpoint, $request);
+        if ($response->successful()) {
+            CobCreatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function createWithoutTransactionId(array $request): Response
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_COB));
 
-        return $this->request()->post($endpoint, $request);
+        $response = $this->request()->post($endpoint, $request);
+        if ($response->successful()) {
+            CobCreatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function getByTransactionId(string $transactionId): Response
@@ -53,7 +65,12 @@ class Cob extends Api implements ConsumesCobEndpoints, FilterApiRequests
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::UPDATE_COB) . $transactionId);
 
-        return $this->request()->patch($endpoint, $request);
+        $response = $this->request()->patch($endpoint, $request);
+        if ($response->successful()) {
+            CobUpdatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     /**

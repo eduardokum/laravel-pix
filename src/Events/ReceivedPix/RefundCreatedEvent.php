@@ -2,8 +2,12 @@
 
 namespace Eduardokum\LaravelPix\Events\ReceivedPix;
 
-class RefundRequestedEvent
+use Illuminate\Foundation\Events\Dispatchable;
+
+class RefundCreatedEvent
 {
+    use Dispatchable;
+
     public array $refund;
 
     public string $e2eid;

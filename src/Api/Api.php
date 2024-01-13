@@ -76,7 +76,9 @@ abstract class Api
 
     protected function getEndpoint(string $endpoint): string
     {
-        return $endpoint . '?' . http_build_query($this->getPsp()->getConfig('additional_params') + $this->additionalParams);
+        $params = $this->getPsp()->getConfig('additional_params') + $this->additionalParams;
+
+        return $endpoint . ($params ? '?' . http_build_query($params) : null);
     }
 
     protected function getPsp(): Psp

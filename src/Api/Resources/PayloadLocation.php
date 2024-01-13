@@ -1,6 +1,6 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\PayloadLocation;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
@@ -9,6 +9,8 @@ use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Events\Cob\PayloadLocationDetachEvent;
+use Eduardokum\LaravelPix\Events\Cob\PayloadLocationCreatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ConsumesPayloadLocationEndpoints;
 
 class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, FilterApiRequests
@@ -35,7 +37,12 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
             . $this->resolveEndpoint(Endpoints::CREATE_PAYLOAD_LOCATION)
         );
 
-        return $this->request()->post($endpoint, ['tipoCob' => $loc]);
+        $response = $this->request()->post($endpoint, ['tipoCob' => $loc]);
+        if ($response->successful()) {
+            PayloadLocationCreatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function getById(string $id): Response
@@ -54,7 +61,12 @@ class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, F
             . $this->resolveEndpoint(Endpoints::PAYLOAD_LOCATION_TXID)
         );
 
-        return $this->request()->delete($endpoint);
+        $response = $this->request()->delete($endpoint);
+        if ($response->successful()) {
+            PayloadLocationDetachEvent::dispatch($id);
+        }
+
+        return $response;
     }
 
     /**

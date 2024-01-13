@@ -1,11 +1,13 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\Cobv;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
 use Illuminate\Http\Client\Response;
 use Eduardokum\LaravelPix\Support\Endpoints;
+use Eduardokum\LaravelPix\Events\Cob\CobvCreatedEvent;
+use Eduardokum\LaravelPix\Events\Cob\CobvUpdatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
@@ -32,14 +34,24 @@ class Cobv extends Api implements FilterApiRequests, ConsumesCobvEndpoints
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_COBV) . $transactionId);
 
-        return $this->request()->put($endpoint, $request);
+        $response = $this->request()->put($endpoint, $request);
+        if ($response->successful()) {
+            CobvCreatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function updateWithTransactionId(string $transactionId, array $request): Response
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_COBV) . $transactionId);
 
-        return $this->request()->patch($endpoint, $request);
+        $response = $this->request()->patch($endpoint, $request);
+        if ($response->successful()) {
+            CobvUpdatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function getByTransactionId(string $transactionId): Response

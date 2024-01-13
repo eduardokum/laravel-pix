@@ -1,6 +1,6 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\LoteCobv;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
@@ -9,6 +9,8 @@ use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
+use Eduardokum\LaravelPix\Events\Cob\LoteCobvCreatedEvent;
+use Eduardokum\LaravelPix\Events\Cob\LoteCobvUpdatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ConsumesLoteCobvEndpoints;
 
 class LoteCobv extends Api implements ConsumesLoteCobvEndpoints, FilterApiRequests
@@ -32,14 +34,24 @@ class LoteCobv extends Api implements ConsumesLoteCobvEndpoints, FilterApiReques
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::CREATE_LOTE_COBV) . $batchId);
 
-        return $this->request()->put($endpoint, $request);
+        $response = $this->request()->put($endpoint, $request);
+        if ($response->successful()) {
+            LoteCobvCreatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function updateBatch(string $batchId, array $request): Response
     {
         $endpoint = $this->getEndpoint($this->getPsp()->getConfig('base_url') . $this->resolveEndpoint(Endpoints::UPDATE_LOTE_COBV) . $batchId);
 
-        return $this->request()->patch($endpoint, $request);
+        $response = $this->request()->patch($endpoint, $request);
+        if ($response->successful()) {
+            LoteCobvUpdatedEvent::dispatch($response->json());
+        }
+
+        return $response;
     }
 
     public function getByBatchId(string $batchId): Response

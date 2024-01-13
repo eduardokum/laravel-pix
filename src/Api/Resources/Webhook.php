@@ -1,6 +1,6 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Api\Resources\Webhook;
+namespace Eduardokum\LaravelPix\Api\Resources;
 
 use RuntimeException;
 use Eduardokum\LaravelPix\Api\Api;
@@ -36,7 +36,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
         $webhook = $this->request()->put($endpoint, ['webhookUrl' => $callbackUrl]);
 
         if ($webhook->successful()) {
-            event(new WebhookCreatedEvent($webhook->json()));
+            WebhookCreatedEvent::dispatch($webhook->json());
         }
 
         return $webhook;
@@ -55,7 +55,7 @@ class Webhook extends Api implements ConsumesWebhookEndpoints, FilterApiRequests
 
         $webhook = $this->request()->delete($endpoint);
 
-        event(new WebhookDeletedEvent($pixKey));
+        WebhookDeletedEvent::dispatch($pixKey);
 
         return $webhook;
     }
