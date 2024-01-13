@@ -34,8 +34,8 @@ class Psp
         $onTheFly = Arr::only($onTheFly, array_keys(config('laravel-pix.psp.default')));
         $onTheFly['authentication_behavior'] =
             Arr::only(
-                Arr::get($onTheFly, 'authentication_behavior') + config('laravel-pix.psp.default.authentication_behavior'),
-                array_keys(config('laravel-pix.psp.default.authentication_behavior'))
+                Arr::get($onTheFly, 'authentication_behavior', []) + config('laravel-pix.psp.default.authentication_behavior', []),
+                array_keys(config('laravel-pix.psp.default.authentication_behavior', []))
             );
         $this->onTheFly = $this->cachedConfigs['on-the-fly'] = $onTheFly + $default;
 
