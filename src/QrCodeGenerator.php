@@ -4,7 +4,6 @@ namespace Eduardokum\LaravelPix;
 
 use SimpleSoftwareIO\QrCode\Generator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use BaconQrCode\Common\ErrorCorrectionLevel;
 use Eduardokum\LaravelPix\Contracts\GeneratesQrCode;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
 
@@ -14,7 +13,7 @@ class QrCodeGenerator implements GeneratesQrCode
 
     public function __construct()
     {
-        $this->qrCode = QrCode::size(config('laravel-pix.qr_code_size', 100))->margin(1)->format('png')->errorCorrection(ErrorCorrectionLevel::Q());
+        $this->qrCode = QrCode::size(config('laravel-pix.qr_code_size', 100))->margin(1)->format('png');
 
         return $this;
     }
