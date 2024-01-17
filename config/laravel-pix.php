@@ -18,7 +18,7 @@ return [
      */
     'qr_code' => [
         'size'   => 200, // pixels
-        'format' => 'svg', // svg, png, eps
+        'format' => 'svg', // svg, bmp, gif, jpg, png, webp, imagick
         'margin' => 1,
     ],
 
