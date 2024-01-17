@@ -4,6 +4,7 @@ namespace Eduardokum\LaravelPix\Concerns;
 
 use Eduardokum\LaravelPix\Pix;
 use Eduardokum\LaravelPix\Exceptions\PixException;
+use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
 
 trait InteractsWithPayload
@@ -11,12 +12,13 @@ trait InteractsWithPayload
     use FormatPayloadValues, HasCR16;
 
     /**
-     * @return ?string
+     * @return string
+     * @throws PixException
      */
-    protected function getAdditionalDataFieldTemplate(): ?string
+    protected function getAdditionalDataFieldTemplate(): string
     {
         if (empty($this->transaction_id)) {
-            return null;
+            throw InvalidTransactionIdException::transactionIdCantBeEmpty();
         }
 
         $transaction_id = $this->formatValue(Pix::ADDITIONAL_DATA_FIELD_TEMPLATE_TXID, $this->transaction_id);
