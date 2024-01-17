@@ -87,14 +87,10 @@ class Payload implements PixPayloadContract
 
     /**
      * @return string
+     * @throws Exceptions\PixException
      */
     public function getPayload(): string
     {
         return $this->buildPayload();
-    }
-
-    public static function decode($payload): array
-    {
-        return self::decodeRecursivePayload($payload);
     }
 }

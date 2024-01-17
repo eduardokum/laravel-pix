@@ -130,4 +130,9 @@ trait DecodePayload
 
         return $aPix;
     }
+
+    public static function decode($payload): array
+    {
+        return self::decodeRecursivePayload($payload);
+    }
 }

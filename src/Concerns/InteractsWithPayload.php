@@ -3,31 +3,18 @@
 namespace Eduardokum\LaravelPix\Concerns;
 
 use Eduardokum\LaravelPix\Pix;
+use Eduardokum\LaravelPix\Exceptions\PixException;
 use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
 use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
 
 trait InteractsWithPayload
 {
-    use HasCR16;
+    use FormatPayloadValues, HasCR16;
 
-    protected function formatValue(string $id, ...$value): string
-    {
-        if (is_array($value[0])) {
-            $value = implode('', $value[0]);
-        } else {
-            $value = implode('', $value);
-        }
-
-        $size = str_pad(
-            mb_strlen($value),
-            2,
-            '0',
-            STR_PAD_LEFT
-        );
-
-        return "{$id}{$size}{$value}";
-    }
-
+    /**
+     * @return string
+     * @throws PixException
+     */
     protected function getAdditionalDataFieldTemplate(): string
     {
         if (empty($this->transaction_id)) {
@@ -54,7 +41,7 @@ trait InteractsWithPayload
         return $this->formatValue(Pix::MERCHANT_ACCOUNT_INFORMATION, $gui, $key, $description);
     }
 
-    protected function getTransactionAmount()
+    protected function getTransactionAmount(): ?string
     {
         return ! empty($this->amount)
             ? $this->formatValue(Pix::TRANSACTION_AMOUNT, $this->amount)
@@ -72,7 +59,7 @@ trait InteractsWithPayload
     }
 
     /**
-     * @throws \Eduardokum\LaravelPix\Exceptions\PixException
+     * @throws PixException
      */
     protected function getMerchantName(): string
     {
@@ -83,6 +70,10 @@ trait InteractsWithPayload
         return $this->formatValue(Pix::MERCHANT_NAME, $this->merchantName);
     }
 
+    /**
+     * @return string
+     * @throws PixException
+     */
     protected function getMerchantCity(): string
     {
         if (empty($this->merchantName)) {
@@ -102,6 +93,10 @@ trait InteractsWithPayload
         return $this->formatValue(Pix::PAYLOAD_FORMAT_INDICATOR, '01');
     }
 
+    /**
+     * @return string
+     * @throws PixException
+     */
     public function toStringWithoutCrc16(): string
     {
         return $this->getPayloadFormat()
@@ -115,13 +110,12 @@ trait InteractsWithPayload
             . $this->getAdditionalDataFieldTemplate();
     }
 
+    /**
+     * @return string
+     * @throws PixException
+     */
     protected function buildPayload(): string
     {
         return $this->toStringWithoutCrc16() . $this->getCRC16($this->toStringWithoutCrc16());
-    }
-
-    public function getPixKey(): string
-    {
-        return $this->pixKey;
     }
 }

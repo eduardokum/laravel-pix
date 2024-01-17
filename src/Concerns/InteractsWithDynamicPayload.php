@@ -3,21 +3,16 @@
 namespace Eduardokum\LaravelPix\Concerns;
 
 use Eduardokum\LaravelPix\Pix;
-use Eduardokum\LaravelPix\Exceptions\InvalidTransactionIdException;
+use Eduardokum\LaravelPix\Exceptions\PixException;
 use Eduardokum\LaravelPix\Exceptions\InvalidMerchantInformationException;
 
 trait InteractsWithDynamicPayload
 {
-    use FormatPayloadValues;
-    use HasCR16;
+    use FormatPayloadValues, HasCR16;
 
     protected function getAdditionalDataFieldTemplate(): string
     {
-        if (empty($this->transaction_id)) {
-            throw InvalidTransactionIdException::transactionIdCantBeEmpty();
-        }
-
-        $transaction_id = $this->formatValue(Pix::ADDITIONAL_DATA_FIELD_TEMPLATE_TXID, $this->transaction_id);
+        $transaction_id = $this->formatValue(Pix::ADDITIONAL_DATA_FIELD_TEMPLATE_TXID, '***');
 
         return $this->formatValue(Pix::ADDITIONAL_DATA_FIELD_TEMPLATE, $transaction_id);
     }
@@ -34,23 +29,9 @@ trait InteractsWithDynamicPayload
         return $this->formatValue(Pix::MERCHANT_ACCOUNT_INFORMATION, $gui, $url);
     }
 
-    protected function getTransactionAmount()
-    {
-        return ! empty($this->amount)
-            ? $this->formatValue(Pix::TRANSACTION_AMOUNT, $this->amount)
-            : null;
-    }
-
     protected function getTransactionCurrency(): string
     {
         return $this->formatValue(Pix::TRANSACTION_CURRENCY, config('laravel-pix.transaction_currency_code', '986'));
-    }
-
-    protected function getPointOfInitializationMethod(): string
-    {
-        return $this->reusable ?? false
-            ? ''
-            : $this->formatValue(Pix::POINT_OF_INITIATION_METHOD, '12');
     }
 
     protected function getCountryCode(): string
@@ -59,7 +40,7 @@ trait InteractsWithDynamicPayload
     }
 
     /**
-     * @throws \Eduardokum\LaravelPix\Exceptions\PixException
+     * @throws PixException
      */
     protected function getMerchantName(): string
     {
@@ -70,6 +51,9 @@ trait InteractsWithDynamicPayload
         return $this->formatValue(Pix::MERCHANT_NAME, $this->merchantName);
     }
 
+    /**
+     * @throws PixException
+     */
     protected function getMerchantCity(): string
     {
         if (empty($this->merchantName)) {
@@ -89,20 +73,26 @@ trait InteractsWithDynamicPayload
         return $this->formatValue(Pix::PAYLOAD_FORMAT_INDICATOR, '01');
     }
 
+    /**
+     * @return string
+     * @throws PixException
+     */
     public function toStringWithoutCrc16(): string
     {
         return $this->getPayloadFormat()
-            . $this->getPointOfInitializationMethod()
             . $this->getMerchantAccountInformation()
             . $this->getMerchantCategoryCode()
             . $this->gettransactionCurrency()
-            . $this->getTransactionAmount()
             . $this->getCountryCode()
             . $this->getMerchantName()
             . $this->getMerchantCity()
             . $this->getAdditionalDataFieldTemplate();
     }
 
+    /**
+     * @return string
+     * @throws PixException
+     */
     protected function buildPayload(): string
     {
         return $this->toStringWithoutCrc16() . $this->getCRC16($this->toStringWithoutCrc16());
