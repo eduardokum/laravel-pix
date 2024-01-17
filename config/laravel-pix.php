@@ -14,9 +14,13 @@ return [
     'country_phone_prefix' => '+55',
 
     /*
-     * Tamanho do QR code quer será gerado pelo gerador implementado no pacote, em pixels.
+     * Configurações do QRCODE
      */
-    'qr_code_size' => 200,
+    'qr_code' => [
+        'size'   => 200, // pixels
+        'format' => 'svg', // svg, png, eps
+        'margin' => 1,
+    ],
 
     /**
      * Faz cache do access_token
