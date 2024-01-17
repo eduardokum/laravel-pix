@@ -4,7 +4,6 @@ namespace Eduardokum\LaravelPix;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use chillerlan\QRCode\Data\QRMatrix;
 use Eduardokum\LaravelPix\Contracts\GeneratesQrCode;
 use Eduardokum\LaravelPix\Contracts\PixPayloadContract;
 use Eduardokum\LaravelPix\Exceptions\QrCodeGeneratorException;
@@ -35,15 +34,6 @@ class QrCodeGenerator implements GeneratesQrCode
         $options->addQuietzone = true;
         $options->quietzoneSize = 1;
         $options->outputBase64 = true;
-        $options->drawLightModules = true;
-        $options->drawCircularModules = true;
-        $options->circleRadius = 0.4;
-        $options->keepAsSquare = [
-            QRMatrix::M_FINDER_DARK,
-            QRMatrix::M_FINDER_DOT,
-            QRMatrix::M_ALIGNMENT_DARK,
-        ];
-
         $this->qrCode = new QRCode($options);
 
         return $this;
