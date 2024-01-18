@@ -26,12 +26,12 @@ class QrCodeGenerator implements GeneratesQrCode
         }
 
         $options = new QROptions();
-        $options->eccLevel = QRCode::ECC_M;
         $options->outputType = $format;
+        $options->quality = 90;
         $options->scale = 20;
         $options->addQuietzone = true;
         $options->quietzoneSize = 1;
-        $options->imageBase64 = true;
+        $options->outputBase64 = true;
         $this->qrCode = new QRCode($options);
 
         return $this;
