@@ -1,6 +1,6 @@
 <?php
 
-namespace Eduardokum\LaravelPix\Events\Cob;
+namespace Eduardokum\LaravelPix\Events\PayloadLocation;
 
 use Illuminate\Foundation\Events\Dispatchable;
 

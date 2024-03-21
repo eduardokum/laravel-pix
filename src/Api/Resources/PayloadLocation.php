@@ -9,9 +9,9 @@ use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
-use Eduardokum\LaravelPix\Events\Cob\PayloadLocationDetachEvent;
-use Eduardokum\LaravelPix\Events\Cob\PayloadLocationCreatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ConsumesPayloadLocationEndpoints;
+use Eduardokum\LaravelPix\Events\PayloadLocation\PayloadLocationDetachEvent;
+use Eduardokum\LaravelPix\Events\PayloadLocation\PayloadLocationCreatedEvent;
 
 class PayloadLocation extends Api implements ConsumesPayloadLocationEndpoints, FilterApiRequests
 {

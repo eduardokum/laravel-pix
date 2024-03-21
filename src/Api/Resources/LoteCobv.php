@@ -9,8 +9,8 @@ use Eduardokum\LaravelPix\Support\Endpoints;
 use Eduardokum\LaravelPix\Api\Contracts\ApplyApiFilters;
 use Eduardokum\LaravelPix\Exceptions\ValidationException;
 use Eduardokum\LaravelPix\Api\Contracts\FilterApiRequests;
-use Eduardokum\LaravelPix\Events\Cob\LoteCobvCreatedEvent;
-use Eduardokum\LaravelPix\Events\Cob\LoteCobvUpdatedEvent;
+use Eduardokum\LaravelPix\Events\LoteCobv\LoteCobvCreatedEvent;
+use Eduardokum\LaravelPix\Events\LoteCobv\LoteCobvUpdatedEvent;
 use Eduardokum\LaravelPix\Api\Contracts\ConsumesLoteCobvEndpoints;
 
 class LoteCobv extends Api implements ConsumesLoteCobvEndpoints, FilterApiRequests
